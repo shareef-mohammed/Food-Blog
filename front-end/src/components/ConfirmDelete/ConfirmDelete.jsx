@@ -1,0 +1,114 @@
+import React, { useState } from "react";
+import { AiOutlineClose } from "react-icons/ai";
+import Loader from "../Loader/Loader";
+
+const Register_style = {
+  position: "fixed",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%,-50%)",
+  backgroundColor: "#FFF",
+  padding: "50px",
+  zIndex: 1000,
+};
+
+const overlay_style = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "rgb( 0, 0, 0, .7 )",
+  zIndex: 1000,
+};
+
+const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
+  const [loader, setLoader] = useState(false);
+  const deletePost = () => {
+    if (!photo) {
+      fetch(`${process.env.REACT_APP_BASEURL}/user/deletePost/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setLoader(true);
+          if (data.status === "ok") {
+            setTimeout(() => {
+              setLoader(false);
+              onClose();
+              window.location.reload();
+            }, 1000);
+          } else {
+            setLoader(false);
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        });
+    } else {
+      fetch(`${process.env.REACT_APP_BASEURL}/user/deletePhoto/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setLoader(true);
+          if (data.status === "ok") {
+            setTimeout(() => {
+              setLoader(false);
+              onClose();
+              load();
+            }, 1000);
+          } else {
+            setLoader(false);
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        });
+    }
+  };
+
+  if (!open) return null;
+  if (loader) return <Loader />;
+  return (
+    <>
+      <div style={overlay_style} />
+      <div style={Register_style} className="grid content-center rounded-md">
+        <AiOutlineClose
+          className="ml-auto w-5 h-5 cursor-pointer"
+          onClick={onClose}
+        />
+        <h3 className="text-center py-4 text-[24px] font-bold">
+          {photo ? "Delete Profile Picture" : "Delete Post"}
+        </h3>
+        <div className="flex justify-center">
+          Are you sure to <p className="px-2 text-[#dc2626]"> DELETE </p> this{" "}
+          {!photo ? "Post" : "Picture"} ... ?
+        </div>
+
+        <div className="flex mx-auto">
+          <button
+            className="bg-[#22c55e] px-3 rounded-md py-1 mt-3 mx-1 text-white"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            className="bg-[#dc2626] rounded-md px-6 py-1 mt-3 mx-1 text-white"
+            onClick={deletePost}
+          >
+            Sure
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ConfirmDelete;
