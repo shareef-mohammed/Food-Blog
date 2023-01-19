@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "../../features/auth/authSlice";
 import { useLoginMutation } from "../../features/auth/authApiSlice";
 import Loader from "../Loader/Loader";
-import Location from "../Location/Location";
+
 
 const Register_style = {
   position: "fixed",

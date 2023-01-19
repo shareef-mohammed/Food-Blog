@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import Loader from "../Loader/Loader";
+import UserDetails from "./UserDetails";
 
 const Follow = ({ user, pos }) => {
   const [follow, setFollow] = useState(false);
   const [count, setCount] = useState(0);
   const [hide, setHide] = useState(true);
+  const [details, setDetails] = useState(false);
+  const [loader, setLoader] = useState(false)
 
   useEffect(() => {
     fetch(
@@ -18,12 +22,19 @@ const Follow = ({ user, pos }) => {
     )
       .then((res) => res.json())
       .then((data) => {
+        setLoader(true)
         if (data.status) {
-          setFollow(true);
-          setCount(data.count);
+          // setTimeout(() => {
+            setFollow(true);
+            setCount(data.count);
+            setLoader(false)
+          // }, 500);
         } else {
-          setFollow(false);
-          setCount(data.count);
+          // setTimeout(() => {
+            setFollow(false);
+            setCount(data.count);
+            setLoader(false)
+          // }, 500);
         }
       })
       .catch(err => {
@@ -61,6 +72,8 @@ const Follow = ({ user, pos }) => {
   const hidebar = () => {
     setHide(!hide);
   };
+
+  if(loader) return <Loader />
   return (
     <div className="sm:w-[5%] md:w-[40%]  mb-auto px-3  pt-3 sticky top-36 right-0 md:border-l-2">
       <div className="hidden md:block ">
@@ -72,30 +85,23 @@ const Follow = ({ user, pos }) => {
               : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
           }
         />
-        <h5 className="text-lg font-semibold ml-3">
+        <UserDetails open={details} user={pos} onClose={() => setDetails(false)} />
+        <h5 className="text-lg font-semibold ml-3 cursor-pointer" onClick={() => setDetails(true)}>
           {pos.details[0].userName}
         </h5>
         <p className="text-lg font-semibold ml-3">{count} followers</p>
         <p className="ml-3">{pos.details[0].bio ? pos.details[0].bio : ""}</p>
         {user._id === pos.details[0]._id ? (
           ""
-        ) : follow ? (
+        ) : 
           <button
             onClick={() => followUser(pos.details[0]._id)}
-            className=" px-4 ml-2 py-2 my-2 text-[#ef4444] rounded-3xl border-2"
+            className={follow ?" px-4 ml-2 py-2 my-2 text-[#ef4444] rounded-3xl border-2": " px-4 ml-3 py-2 my-2 text-white rounded-3xl bg-[#ef4444]"}
           >
-            {" "}
-            Unfollow
+            
+            {follow? 'Unfollow' : 'Follow'}
           </button>
-        ) : (
-          <button
-            onClick={() => followUser(pos.details[0]._id)}
-            className=" px-4 ml-3 py-2 my-2 text-white rounded-3xl bg-[#ef4444]"
-          >
-            {" "}
-            Follow
-          </button>
-        )}
+        }
       </div>
 
       <div onClick={handleHide} className="block md:hidden ">

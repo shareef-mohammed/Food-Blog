@@ -19,7 +19,7 @@ const Comments = ({ user, pos, id }) => {
 
   const read = async (skip) => {
     const res = await fetch(
-      `http://localhost:7000/user/postComments/${id}?skip=${skip}`,
+      `${process.env.REACT_APP_BASEURL}/user/postComments/${id}?skip=${skip}`,
       {
         headers: {
           "Content-Type": "application/json",

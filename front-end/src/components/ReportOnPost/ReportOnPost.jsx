@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import Loader from "../Loader/Loader";
 
 const Register_style = {
   position: "fixed",
@@ -22,14 +23,19 @@ const overlay_style = {
   zIndex: 1000,
 }; 
 
-const ReportOnPost = ({ user, userId, id, open, onClose }) => {
+const ReportOnPost = ({ user, userId, id, open, onClose, postedUser }) => {
   const [report, setReport] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [load, setLoad] = useState(false)
 
   const reportPost = () => {
     const reportedUser = user.userName;
     if (!report) {
       setErrMsg("Invalid input !!!");
+      return;
+    }
+    if (report.length < 10) {
+      setErrMsg("Write a valid reason!!!");
       return;
     }
     fetch(`${process.env.REACT_APP_BASEURL}/user/reportPost/${id}`, {
@@ -38,19 +44,24 @@ const ReportOnPost = ({ user, userId, id, open, onClose }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId,
+        postedUser,
         reportedUser,
         report,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
+        setLoad(true)
         if (data.status === "wrongErr") {
           setErrMsg("Something went wrong...");
         } else if (data.status === "inputErr") {
           setErrMsg("Invalid Input ...");
         } else {
-          onClose();
+
+          setTimeout(() => {
+            onClose();
+            setLoad(false)
+          }, 1000);
         }
       })
       .catch(err => {
@@ -58,6 +69,7 @@ const ReportOnPost = ({ user, userId, id, open, onClose }) => {
       });
   };
   if (!open) return null;
+  if(load) return <Loader />
   return (
     <>
       <div style={overlay_style} onClick={onClose} />

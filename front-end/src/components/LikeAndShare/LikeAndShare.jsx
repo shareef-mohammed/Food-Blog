@@ -6,7 +6,7 @@ import { RWebShare } from "react-web-share";
 import { TbMessageReport } from "react-icons/tb";
 import ReportOnPost from "../ReportOnPost/ReportOnPost";
 
-const LikeAndShare = ({ id, user, user1 }) => {
+const LikeAndShare = ({ id, user, user1, postedUser }) => {
   const [like, setLike] = useState(false);
   const [report, setReport] = useState(false);
   const userId = user._id
@@ -83,6 +83,7 @@ const LikeAndShare = ({ id, user, user1 }) => {
       /> : ''}
       <ReportOnPost
         id={id}
+        postedUser={postedUser}
         user={user}
         userId={userId}
         open={report}

@@ -204,12 +204,38 @@ exports.userPosts = async (req, res) => {
 exports.homePosts = async (req, res) => {
   try {
     const skip = req.query.skip ? Number(req.query.skip) : 0;
-    const DEFAULT_LIMIT = 10;
-    const data = await postData
-      .find({})
-      .sort({ updatedAt: -1 })
-      .skip(skip)
-      .limit(DEFAULT_LIMIT);
+    const DEFAULT_LIMIT = 6;
+    const user = req.headers["x-custom-header"];
+    const username = await userData.findOne({ userName: user });
+    const userEmail = await userData.findOne({ email: user });
+
+    let location;
+    if (username) {
+      location = username.location;
+    } else if (userEmail) {
+      location = userEmail.location;
+    } else {
+      location = "";
+    }
+  
+    const data = await postData.aggregate([{
+      $match: { address : location}
+    },
+      {
+        $sort: {
+          updatedAt: -1,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "details",
+        },
+      },
+    ]);
+      
     res.json({ data });
   } catch (err) {
     console.log(err);
@@ -320,16 +346,17 @@ exports.getLikeDetails = async (req, res) => {
 exports.reportPost = async (req, res) => {
   try {
     const postId = req.params.id;
-    const { userId, reportedUser, report } = req.body;
-    if (!postId || !userId || !reportedUser) {
+    const { postedUser, reportedUser, report } = req.body;
+    if (!postId || !postedUser || !reportedUser) {
       return res.json({ status: "wrongErr" });
     }
+    
     if (!report) {
       return res.json({ status: "inputErr" });
     }
     const data = new reportData({
       postId,
-      userId,
+      userId: postedUser,
       reportedUser,
       report,
     });
@@ -355,18 +382,99 @@ exports.locations = async(req,res) => {
 
 exports.categories = async(req,res) => {
   try {
-    const category = await postData.aggregate([{
+    const skip = req.query.skip ? Number(req.query.skip) : 0;
+    const DEFAULT_LIMIT = 10;
+    const data = await postData.aggregate([{
       $group: {
         _id: '$foodName',
+        url : {"$first": "$images.url"}
       }
     },{
-      $project:{
-        images:{
-          url:1
-        }
-      }
+      $skip: skip
+    }, {
+      $limit:DEFAULT_LIMIT
     }])
-    console.log(category)
+
+    
+    res.json({data})
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+exports.singleCategory = async(req, res) => {
+  try {
+    let skip = req.query.skip ? Number(req.query.skip) : 0;
+    let DEFAULT_LIMIT = 6;
+    const q = req.query.q;
+    const category = req.params.id
+    const posts = await postData.aggregate([{
+      $match: { foodName : category}
+    },
+      {
+        $sort: {
+          updatedAt: -1,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "details",
+        },
+      },
+    ]);
+
+    const keys = ["foodName", "resName"];
+
+    const search = (data) => {
+      return data.filter((item) => {
+        return keys.some((key) => item[key].toLowerCase().includes(q));
+      });
+    };
+    const data = search(posts).splice(skip, DEFAULT_LIMIT);
+
+    res.json({ data });
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+exports.filteredPosts = async(req, res) => {
+  try {
+    let skip = req.query.skip ? Number(req.query.skip) : 0;
+    let DEFAULT_LIMIT = 8;
+    const location = req.headers["x-custom-header"];
+    const q = req.query.q
+    const posts = await postData.aggregate([{
+      $match: { address : location}
+    },
+      {
+        $sort: {
+          updatedAt: -1,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "details",
+        },
+      },
+    ]);
+
+    const keys = ["foodName", "resName"];
+
+    const search = (data) => {
+      return data.filter((item) => {
+        return keys.some((key) => item[key].toLowerCase().includes(q));
+      });
+    };
+    const data = search(posts).splice(skip, DEFAULT_LIMIT);
+
+    res.json({ data });
   } catch (err) {
     console.log(err)
   }

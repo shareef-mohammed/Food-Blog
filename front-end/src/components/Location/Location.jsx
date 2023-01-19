@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import Loader from '../Loader/Loader';
+import { AiOutlineClose } from "react-icons/ai";
 
 const Register_style = {
     position: "fixed",
@@ -23,8 +24,8 @@ const Register_style = {
     zIndex: 1000,
   };
 
-const Location = ({opened, onClose, user }) => {
-  const [places, setPlaces] = useState({})
+const Location = ({opened, onClose, user, button }) => {
+  const [places, setPlaces] = useState([])
   const [load, setLoad] = useState(false)
   const id = user._id
   useEffect(() => {
@@ -42,7 +43,7 @@ const Location = ({opened, onClose, user }) => {
       console.log(err)
     })
   },[])
-  
+    
   const setLocality = (place) => {
     fetch(`${process.env.REACT_APP_BASEURL}/user/setLocality`, {
       method:"PUT",
@@ -72,7 +73,12 @@ const Location = ({opened, onClose, user }) => {
     <>
         <div style={overlay_style} onClick={onClose} />
         <div style={Register_style} className='text-center rounded-lg' >
+          {button && <AiOutlineClose
+            className="ml-auto w-5 h-5 cursor-pointer"
+            onClick={onClose}
+          />}
             <p className='text-xl font-semibold mb-2'>Select your preferred Location...</p>
+
             <div className='grid max-h-96 overflow-scroll scrollbar-hide' >
             {
                places && places.map((location, i) => {

@@ -382,10 +382,18 @@ exports.isLocated = async (req, res) => {
     const username = await userData.findOne({ userName: user });
     const userEmail = await userData.findOne({ email: user });
     
-    if (username.location === null || userEmail.location === null) {
-      res.json({ status: false });
+    if(username ) {
+      if (username.location === null ) {
+        res.json({ status: false });
+      } else {
+        res.json({ status: true });
+      }
     } else {
-      res.json({ status: true });
+      if( userEmail.location === null) {
+        res.json({ status: false });
+      } else {
+        res.json({ status: true });
+      }
     }
   } catch (err) {
     console.log(err);

@@ -90,7 +90,7 @@ const AddBio = ({ open, onClose, id }) => {
           <br />
         </form>
         <button
-          className="bg-[#22c55e] px-3 py-2 mt-3 bg-[#fbcfe8] hover:bg-[#db2777] hover:text-white"
+          className=" px-3 py-2 mt-3 bg-[#fbcfe8] hover:bg-[#db2777] hover:text-white"
           onClick={updateBio}
         >
           Upload

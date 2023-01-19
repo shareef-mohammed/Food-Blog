@@ -12,22 +12,22 @@ const EditAndDelete = ({ post, user, load }) => {
   const [edit, setEdit] = useState(false);
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
-  const singlePost = (id) => {
+  const singleCategory = (id) => {
     setLoader(true);
     setTimeout(() => {
-      navigate(`/singlePost/${id}`);
+      navigate(`/Posts/SingleCategory/${id}`);
       setLoader(false);
     }, 1000);
   };
   if (loader) return <Loader />;
   return (
     <>
-      <EditPost
+      {user && <EditPost
         open={edit}
         onClose={() => setEdit(false)}
         load={load}
         id={post._id}
-      />
+      />}
       <ConfirmDelete
         open={del}
         onClose={() => setDel(false)}
@@ -49,7 +49,7 @@ const EditAndDelete = ({ post, user, load }) => {
         <div className="mt-20 w-12 h-10 absolute rounded-lg ml-32 justify-center flex bg-[#d1fae5] opacity-5 hover:opacity-100 scale-110 ease-in-out duration-300">
           <AiFillEye
             className="w-8 h-8 mt-1 cursor-pointer "
-            onClick={() => singlePost(post._id)}
+            onClick={() => singleCategory(post._id)}
           />
         </div>
       )}

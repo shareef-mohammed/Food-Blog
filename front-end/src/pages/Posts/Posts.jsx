@@ -13,7 +13,7 @@ const Posts = () => {
   const token = useSelector(selectCurrentUser);
   useEffect(() => {
     if (token) {
-      fetch(`http://localhost:7000/user/details/${token}`, {
+      fetch(`${process.env.REACT_APP_BASEURL}/user/details`, {
         headers: {
           "Content-Type": "application/json",
           "X-Custom-Header": `${token}`,
@@ -29,7 +29,7 @@ const Posts = () => {
   return (
     <div>
       <Navba user={user} posts={true} />
-      <PostsContent user={user} />
+      <PostsContent user={user} page={true} />
       <Footer />
     </div>
   );

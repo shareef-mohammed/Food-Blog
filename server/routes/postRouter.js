@@ -17,6 +17,8 @@ const {
   reportPost,
   locations,
   categories,
+  singleCategory,
+  filteredPosts,
 } = require("../controllers/postController");
 
 router.post("/user/addPost/:id", addPost);
@@ -34,5 +36,7 @@ router.get("/user/getLikeDetails/:id", getLikeDetails);
 router.post("/user/reportPost/:id", reportPost);
 router.get("/posts/locations", locations);
 router.get("/posts/categories", categories);
+router.get("/posts/singleCategory/:id", singleCategory);
+router.get("/posts/filteredPosts", filteredPosts);
 
 module.exports = router;

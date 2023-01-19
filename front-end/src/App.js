@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import RequireAuth from "./features/auth/RequireAuth";
 import Layout from "./components/Layout";
 import ReportManagement from "./pages/ReportManagement/ReportManagement";
+import SingleCatePosts from "./pages/SingleCatePosts/SingleCatePosts";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="/Posts" element={<Posts />} />
+        <Route path="/Posts/SingleCategory/:id" element={<SingleCatePosts />} />
         <Route path="/Admin/Login" element={<AdminLogin />} />
         <Route path="/Admin/Dashboard" element={<AdminDashboard />} />
         <Route path="/Admin/UserManagement" element={<AdminUserMan />} />

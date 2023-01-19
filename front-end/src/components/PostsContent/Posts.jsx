@@ -4,6 +4,7 @@ import { BsFillStarFill } from "react-icons/bs";
 import { format } from "timeago.js";
 import Loader from "../Loader/Loader";
 import { useNavigate } from "react-router-dom";
+import Filter from "./Filter";
 
 const Posts = ({ user, data }) => {
   const [loader, setLoader] = useState(false);
@@ -22,7 +23,7 @@ const Posts = ({ user, data }) => {
       {data.map((post, i) => {
         return (
           <div
-            className="max-w-[1280px] mx-auto px-12 py-6  relative flex  items-center "
+            className="max-w-[100%] mx-auto px-12 py-6  relative flex  items-center "
             key={i}
           >
             <div className="md:w-[60%] border-b-2">
@@ -58,7 +59,7 @@ const Posts = ({ user, data }) => {
                   <BsFillStarFill className="ml-4 mt-2 w-3 h-3 text-[#f59e0b]" />
                   <p className="pt-1 text-sm pl-1">{post.rating}</p>
                 </div>
-                {user && <LikeAndShare id={post._id} user={user} user1={post.userId}/>}
+                {user && <LikeAndShare postedUser={post.details[0].userName} id={post._id} user={user} user1={post.userId}/>}
               </div>
             </div>
             <div className="sm:w-[40%] md:w-[30%] lg:w-[20%] ml-3">
@@ -71,6 +72,7 @@ const Posts = ({ user, data }) => {
                 }
               />
             </div>
+            
           </div>
         );
       })}

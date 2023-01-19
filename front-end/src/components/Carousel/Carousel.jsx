@@ -17,7 +17,7 @@ const Carousel = () => {
 
   const autoScroll = true;
   let slideInterval;
-  let intervalTime = 5000;
+  let intervalTime = 10000;
 
   function auto() {
     slideInterval = setInterval(nextSlide, intervalTime);

@@ -7,6 +7,7 @@ import ContentLoader from "../Loader/ContentLoader";
 
 const RowPost = ({ user, home }) => {
   const [rowPost, setRowPost] = useState([]);
+  const [category, setCategory] = useState([]);
   const navigate = useNavigate();
   const [skip, setSkip] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
@@ -15,17 +16,7 @@ const RowPost = ({ user, home }) => {
 
   useEffect(() => {
     fetchPost();
-    if(home) {
-      fetch(`${process.env.REACT_APP_BASEURL}/posts/categories`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then(res => res.json())
-      .then(data => {
-
-      })
-    }
+    
   }, [skip, reload]);
 
   const fetchPost = async () => {
@@ -41,7 +32,11 @@ const RowPost = ({ user, home }) => {
         return;
       }
 
-      setRowPost([...rowPost, ...data]);
+      if(home) {
+        setCategory([...category, ...data]);
+      } else {
+        setRowPost([...rowPost, ...data]);
+      }
     } catch (error) {
       {
         loading && <ContentLoader />;
@@ -71,20 +66,16 @@ const RowPost = ({ user, home }) => {
 
       return await res.json();
     } else {
-      const res = await fetch(
-        `${process.env.REACT_APP_BASEURL}/user/homePosts?skip=${skip}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-Custom-Header": `${user}`,
-          },
-        }
-      );
-
+      const res = await fetch(`${process.env.REACT_APP_BASEURL}/posts/categories?skip=${skip}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       return await res.json();
     }
   };
 
+  
   const handleScroll = (e) => {
     const { offsetHeight, scrollTop, scrollHeight } = e.target;
     if (offsetHeight + scrollTop >= scrollHeight) {
@@ -109,7 +100,7 @@ const RowPost = ({ user, home }) => {
     let slider = document.getElementById("slider");
     slider.scrollLeft = slider.scrollLeft - 500;
   };
-  if (rowPost.length === 0) {
+  if (rowPost.length === 0 && category.length == 0) {
     return (
       <div className=" relative flex  pt-16 px-16 ">
         <p className="mx-auto text-[#dc2626]">Your Posts will shown here...</p>
@@ -118,7 +109,7 @@ const RowPost = ({ user, home }) => {
   }
 
   return (
-    <div className=" relative flex items-center pt-16 px-16 ">
+    <div className=" relative flex items-center pt-8 px-16 ">
       <MdChevronLeft
         className="opacity-50 cursor-pointer  hover:opacity-100"
         onClick={slideLeft}
@@ -129,7 +120,35 @@ const RowPost = ({ user, home }) => {
         id="slider"
         className="flex scroll overflow-x-scroll  whitespace-nowrap scroll-smooth scrollbar-hide "
       >
-        {rowPost.map((post, i) => {
+        {home ? category.map((post, i) => {
+          return (
+            <div className="text-center relative" key={i}>
+              <EditAndDelete
+                post={post}
+                user={user}
+                load={() => {
+                  if (reload) {
+                    setReload(false);
+                  } else {
+                    setReload(true);
+                  }
+                }}
+              />
+              <img
+                className="w-[300px] shadow rounded-3xl h-[200px] inline-block "
+                src={
+                  post.url
+                    ? post.url
+                    : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                }
+                alt="/"
+              />
+
+              <h6 className="w-80">{post._id}</h6>
+            </div>
+          );
+        }) :
+        rowPost.map((post, i) => {
           return (
             <div className="text-center relative" key={i}>
               <EditAndDelete
