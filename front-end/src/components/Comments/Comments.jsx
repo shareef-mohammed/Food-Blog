@@ -79,8 +79,8 @@ const Comments = ({ user, pos, id }) => {
       .then((data) => {
         setComment("");
       })
-      .catch(err => {
-        console.log(err)
+      .catch((err) => {
+        console.log(err);
       });
   };
   return (

@@ -14,6 +14,8 @@ const {
   getReports,
   postChartData,
   userCounts,
+  removeReport,
+  adminDetails,
 } = require("../controllers/adminController");
 
 const auth = require("../middleware/auth");
@@ -29,5 +31,7 @@ router.get("/getBanners", getBanners);
 router.get("/getReports", getReports);
 router.get("/postChartData", postChartData);
 router.get("/userCounts", userCounts);
+router.delete("/removeReport/:id", removeReport);
+router.get('/details', adminDetails);
 
 module.exports = router;

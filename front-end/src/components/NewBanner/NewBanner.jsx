@@ -1,6 +1,7 @@
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const Register_style = {
   position: "fixed",
@@ -28,11 +29,17 @@ const NewBanner = ({ open, onClose }) => {
   const [offer, setOffer] = useState("");
   const [image, setImage] = useState("");
   const [address, setAddress] = useState("");
+  const [code, setCode] = useState("");
+  const [errMsg, setErrMsg] = useState("");
 
   function addBanner() {
     if (!foodName || !resName || !offer || !image) {
-      return (document.getElementById("errr").innerHTML =
-        " Empty values are not allowed !!!");
+      return setErrMsg(" Empty values are not allowed !!!");
+    }
+    if (code) {
+      if (code.length < 5) {
+        return setErrMsg("Enter a valid code....");
+      }
     }
     const data = new FormData();
     data.append("file", image);
@@ -56,17 +63,26 @@ const NewBanner = ({ open, onClose }) => {
             resName,
             address,
             offer,
+            code,
             url,
           }),
         })
           .then((res) => res.json())
           .then((data) => {
             onClose();
-            document.getElementById("success").innerHTML =
-              "Banner added successfully...";
+            toast.success("Banner added successfully...", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
       })
     );
@@ -84,10 +100,9 @@ const NewBanner = ({ open, onClose }) => {
         <h3 className="text-center py-4 text-[24px] font-bold">New Banner</h3>
         <div className="text-left">
           <form>
-            <div
-              id="errr"
-              className="text-center z-10 text-white bg-[#fca5a5]"
-            ></div>
+            <div id="errr" className="text-center z-10 text-[#fca5a5]">
+              {errMsg}
+            </div>
             <label className="py-1">
               Food Name <br />
               <input
@@ -127,6 +142,17 @@ const NewBanner = ({ open, onClose }) => {
                 type="text"
                 value={offer}
                 onChange={(e) => setOffer(e.target.value)}
+              />
+            </label>
+            <br />
+            <label className="py-1">
+              Promo Code
+              <br />
+              <input
+                className="w-[100%] border-2"
+                type="text"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
               />
             </label>
             <br />

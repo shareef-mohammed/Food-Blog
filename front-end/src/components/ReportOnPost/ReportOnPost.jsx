@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Loader from "../Loader/Loader";
+import { toast } from "react-toastify";
 
 const Register_style = {
   position: "fixed",
@@ -21,12 +22,12 @@ const overlay_style = {
   bottom: 0,
   backgroundColor: "rgb( 0, 0, 0, .7 )",
   zIndex: 1000,
-}; 
+};
 
 const ReportOnPost = ({ user, userId, id, open, onClose, postedUser }) => {
   const [report, setReport] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState(false);
 
   const reportPost = () => {
     const reportedUser = user.userName;
@@ -51,25 +52,37 @@ const ReportOnPost = ({ user, userId, id, open, onClose, postedUser }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setLoad(true)
+        setLoad(true);
         if (data.status === "wrongErr") {
+          setLoad(false);
           setErrMsg("Something went wrong...");
         } else if (data.status === "inputErr") {
+          setLoad(false);
           setErrMsg("Invalid Input ...");
         } else {
-
           setTimeout(() => {
             onClose();
-            setLoad(false)
+            setLoad(false);
+            toast.success("Your report on post has sended successfully...", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
           }, 1000);
         }
       })
-      .catch(err => {
-        console.log(err)
+      .catch((err) => {
+        setLoad(false);
+        console.log(err);
       });
   };
   if (!open) return null;
-  if(load) return <Loader />
+  if (load) return <Loader />;
   return (
     <>
       <div style={overlay_style} onClick={onClose} />

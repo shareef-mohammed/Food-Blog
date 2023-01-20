@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Loader from "../Loader/Loader";
+import { toast } from "react-toastify";
 
 const Register_style = {
   position: "fixed",
@@ -35,8 +36,8 @@ const AddBio = ({ open, onClose, id }) => {
       setErrMsg("Fields cannot be empty...");
       return;
     }
-    if(bio.length < 20) {
-      return setErrMsg("Your Bio must have atleast 20 letters...")
+    if (bio.length < 20) {
+      return setErrMsg("Your Bio must have atleast 20 letters...");
     }
     fetch(`${process.env.REACT_APP_BASEURL}/user/updateBio/${id}`, {
       method: "PUT",
@@ -54,14 +55,24 @@ const AddBio = ({ open, onClose, id }) => {
           setTimeout(() => {
             setLoader(false);
             onClose();
+            toast.success("Bio added successfully...", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
           }, 1000);
         } else {
           setLoader(false);
           setErrMsg("Changes are not saved...");
         }
       })
-      .catch(err => {
-        console.log(err)
+      .catch((err) => {
+        console.log(err);
       });
   };
 

@@ -85,7 +85,9 @@ exports.otpVerify = async (req, res) => {
 
     if (req.body.input) {
       email = req.body.input;
+      
     }
+    
 
     const userOtp = await userOTPData.findOne({ userEmail: email });
 
@@ -95,12 +97,6 @@ exports.otpVerify = async (req, res) => {
         await userData.findOneAndUpdate({ email }, { isVerified: true });
         await userOTPData.findOneAndDelete({ userEmail: email });
         const user = await userData.findOne({ email });
-
-        // const token = jwt.sign({
-        //     id:user._id,
-        //     name: user.name,
-        //     type:'user'
-        // },process.env.JWT_SECRET_KEY);
         res.json({ user });
       } else {
         res.json({ status: "invalid" });
@@ -241,8 +237,8 @@ exports.userDetails = async (req, res) => {
 exports.resetEmail = async (req, res) => {
   try {
     const email = req.body.input;
-    const userId = req.body.id;
-    sendOTPVerificationMail({ _id: userId, email }, req, res);
+    const _id = req.body.id;
+    sendOTPVerificationMail({ _id, email }, req, res);
   } catch (err) {
     console.log(err);
   }

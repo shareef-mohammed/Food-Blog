@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register_style = {
   position: "fixed",
@@ -48,17 +49,25 @@ const ResetPassword = ({ open, email, onClose }) => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "ok") {
-            document.getElementById("scss").innerHTML =
-              "Password has changed. Please login again";
             onClose();
             navigate("/");
+            toast.success("Password has changed. Login again...", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
           } else {
             document.getElementById("err1").innerHTML =
               "Password is not changed";
           }
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err) => {
+          console.log(err);
         });
     }
   }

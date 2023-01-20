@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import Loader from "../Loader/Loader";
+import AdminConfirm from "../AdminConfirm/AdminConfirm";
 
 const Sidebar = ({ dashboard, users, banners, reports }) => {
   const [side, setSide] = useState(true);
-
-  function adminLogout() {
-    localStorage.removeItem("adminToken");
-    navigate("/Admin/Login");
-  }
+  const [load, setLoad] = useState(false);
+  const [confirm, setConfirm] = useState(false);
 
   const handleSide = () => {
     setSide(!side);
@@ -18,6 +17,8 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
     setSide(true);
   };
   const navigate = useNavigate();
+
+  if (load) return <Loader />;
   return (
     <div className="w-[20%] h-[600px] pt-3 sticky left-0 top-24 bottom-0 float-left md:border-r border-gray">
       <div className="hidden md:block">
@@ -27,7 +28,13 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
               ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md"
               : "py-3 pl-3 cursor-pointer"
           }
-          onClick={() => navigate("/Admin/Dashboard")}
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/Dashboard");
+              setLoad(false);
+            }, 500);
+          }}
         >
           Dashboard
         </h6>
@@ -37,7 +44,13 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
               ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md"
               : "py-3 pl-3 cursor-pointer"
           }
-          onClick={() => navigate("/Admin/UserManagement")}
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/UserManagement");
+              setLoad(false);
+            }, 500);
+          }}
         >
           User Management
         </h6>
@@ -47,7 +60,13 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
               ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md"
               : "py-3 pl-3 cursor-pointer"
           }
-          onClick={() => navigate("/Admin/BannerManagement")}
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/BannerManagement");
+              setLoad(false);
+            }, 500);
+          }}
         >
           Banner Management
         </h6>
@@ -57,13 +76,23 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
               ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md"
               : "py-3 pl-3 cursor-pointer"
           }
-          onClick={() => navigate("/Admin/ReportManagement")}
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/ReportManagement");
+              setLoad(false);
+            }, 500);
+          }}
         >
           Report Management
         </h6>
-        <h6 className="py-3 pl-3 cursor-pointer" onClick={adminLogout}>
+        <h6
+          className="py-3 pl-3 cursor-pointer"
+          onClick={() => setConfirm(true)}
+        >
           Logout
         </h6>
+        <AdminConfirm open={confirm} onClose={() => setConfirm(false)} />
       </div>
       <div onClick={handleSide} className="block ml-2 md:hidden ">
         {!side ? <AiOutlineClose size={20} /> : <AiOutlineMenu size={20} />}
@@ -86,7 +115,13 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
               ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md "
               : "py-3 pl-3 cursor-pointer"
           }
-          onClick={() => navigate("/Admin/Dashboard")}
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/Dashboard");
+              setLoad(false);
+            }, 500);
+          }}
         >
           Dashboard
         </h6>
@@ -96,7 +131,13 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
               ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md"
               : "py-3 pl-3 cursor-pointer"
           }
-          onClick={() => navigate("/Admin/UserManagement")}
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/UserManagement");
+              setLoad(false);
+            }, 500);
+          }}
         >
           User Management
         </h6>
@@ -106,7 +147,13 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
               ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md"
               : "py-3 pl-3 cursor-pointer"
           }
-          onClick={() => navigate("/Admin/BannerManagement")}
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/BannerManagement");
+              setLoad(false);
+            }, 500);
+          }}
         >
           Banner Management
         </h6>
@@ -116,13 +163,23 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
               ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md"
               : "py-3 pl-3 cursor-pointer"
           }
-          onClick={() => navigate("/Admin/ReportManagement")}
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/ReportManagement");
+              setLoad(false);
+            }, 500);
+          }}
         >
           Report Management
         </h6>
-        <h6 className="py-3 pl-3 cursor-pointer" onClick={adminLogout}>
+        <h6
+          className="py-3 pl-3 cursor-pointer"
+          onClick={() => setConfirm(true)}
+        >
           Logout
         </h6>
+        <AdminConfirm open={confirm} onClose={() => setConfirm(false)} />
       </div>
     </div>
   );

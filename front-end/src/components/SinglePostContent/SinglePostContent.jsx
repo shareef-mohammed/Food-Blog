@@ -26,8 +26,8 @@ const SinglePostContent = () => {
       .then((data) => {
         setUser(data.details);
       })
-      .catch(err => {
-        console.log(err)
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -42,8 +42,8 @@ const SinglePostContent = () => {
       .then((data) => {
         setPost(data.post);
       })
-      .catch(err => {
-        console.log(err)
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -86,7 +86,8 @@ const SinglePostContent = () => {
                     <LikeAndShare
                       id={pos._id}
                       user={user}
-                      userId={pos.details[0].userName}
+                      postedUser={pos.details[0].userName}
+                      user1={pos.userId}
                     />
                   )}
                 </div>

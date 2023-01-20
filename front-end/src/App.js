@@ -14,28 +14,39 @@ import RequireAuth from "./features/auth/RequireAuth";
 import Layout from "./components/Layout";
 import ReportManagement from "./pages/ReportManagement/ReportManagement";
 import SingleCatePosts from "./pages/SingleCatePosts/SingleCatePosts";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route element={<RequireAuth />}>
-          <Route path="/Profile" element={<Profile />} />
-          <Route path="/SinglePost/:id" element={<SinglePost />} />
+    <>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route element={<RequireAuth />}>
+            <Route path="/Profile" element={<Profile />} />
+            <Route path="/SinglePost/:id" element={<SinglePost />} />
+          </Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/Posts" element={<Posts />} />
+          <Route
+            path="/Posts/SingleCategory/:id"
+            element={<SingleCatePosts />}
+          />
+          <Route path="/Admin/Login" element={<AdminLogin />} />
+          <Route path="/Admin/Dashboard" element={<AdminDashboard />} />
+          <Route path="/Admin/UserManagement" element={<AdminUserMan />} />
+          <Route path="/Admin/BannerManagement" element={<BannerMan />} />
+          <Route
+            path="/Admin/ReportManagement"
+            element={<ReportManagement />}
+          />
+          <Route path="/User/Login" element={<Login />} />
+          <Route path="/User/Register" element={<Register />} />
+          <Route path="/User/ForgotPassword" element={<ForgotPassword />} />
         </Route>
-        <Route path="/" element={<Home />} />
-        <Route path="/Posts" element={<Posts />} />
-        <Route path="/Posts/SingleCategory/:id" element={<SingleCatePosts />} />
-        <Route path="/Admin/Login" element={<AdminLogin />} />
-        <Route path="/Admin/Dashboard" element={<AdminDashboard />} />
-        <Route path="/Admin/UserManagement" element={<AdminUserMan />} />
-        <Route path="/Admin/BannerManagement" element={<BannerMan />} />
-        <Route path="/Admin/ReportManagement" element={<ReportManagement />} />
-        <Route path="/User/Login" element={<Login />} />
-        <Route path="/User/Register" element={<Register />} />
-        <Route path="/User/ForgotPassword" element={<ForgotPassword />} />
-      </Route>
-    </Routes>
+      </Routes>
+      <ToastContainer />
+    </>
   );
 }
 

@@ -34,10 +34,6 @@ const postSchema = mongoose.Schema(
     resImage: {
       url: String,
     },
-    // location: {
-    //   type: { type: String },
-    //   coordinates: [],
-    // },
   },
   { timestamps: true }
 );

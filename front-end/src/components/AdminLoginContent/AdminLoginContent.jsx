@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader/Loader";
+import { toast } from "react-toastify";
 
 const AdminLoginContent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const [load, setLoad] = useState(false);
   const navigate = useNavigate();
   function adminLogin() {
     if (!email || !password) {
-      document.getElementById("err").innerHTML = "Empty values are not allowed";
+      setErrMsg("Empty values are not allowed");
     } else {
       fetch(`${process.env.REACT_APP_BASEURL}/admin/adminLogin`, {
         method: "POST",
@@ -21,27 +25,47 @@ const AdminLoginContent = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+          setLoad(true);
           if (data.status === "emailErr") {
-            document.getElementById("err").innerHTML = "Invalid Email Id";
+            setLoad(false);
+            setErrMsg("Invalid Email Id");
           } else if (data.status === "passErr") {
-            document.getElementById("err").innerHTML = "Invalid Password";
+            setLoad(false);
+            setErrMsg("Invalid Password");
           } else {
-            localStorage.setItem("adminToken", data.token);
-            navigate("/Admin/Dashboard");
+            setTimeout(() => {
+              setLoad(false);
+              localStorage.setItem("adminToken", data.token);
+              navigate("/Admin/Dashboard");
+              toast.success("Successfully logged in...", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+            }, 1000);
           }
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err) => {
+          setLoad(false);
+          console.log(err);
         });
     }
   }
+  if (load) return <Loader />;
   return (
     <div className="max-w-[1280px] mx-auto px-4 pt-3  relative flex justify-between items-center ">
       <div className="mx-auto pt-12 bg-[#fbcfe8] text-center rounded-md">
         <h3 className="text-[30px] font-bold">Login as Admin</h3>
         <div className="text-left py-4">
           <from className="">
-            <div id="err"></div>
+            <div className="text-[#b91c1c] text-center" id="err">
+              {errMsg}
+            </div>
             <label className="px-8 mb-3">
               Email <br />
               <input

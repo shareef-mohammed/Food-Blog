@@ -2,19 +2,20 @@ import React from "react";
 import { useState } from "react";
 import Loader from "../Loader/Loader";
 import OtpVerify from "../OtpVerify/OtpVerify";
+import { toast } from "react-toastify";
 
 const ForgotPassContent = () => {
   const [otp, setOtp] = useState(false);
   const [email, setEmail] = useState("");
   const [loader, setLoader] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   function submitEmail() {
     const regx =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!email) {
-      document.getElementById("errrr").innerHTML =
-        "Empty values are not allowed !!!";
+      setErrMsg("Empty values are not allowed !!!");
     } else if (!email.match(regx)) {
-      document.getElementById("errrr").innerHTML = "Enter a valid email id";
+      setErrMsg("Enter a valid email id");
     } else {
       fetch(`${process.env.REACT_APP_BASEURL}/user/forgotPassword`, {
         method: "POST",
@@ -28,14 +29,26 @@ const ForgotPassContent = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "notFound") {
-            document.getElementById("errrr").innerHTML =
-              "Email is not found !!! Try with another or Signup";
+            setErrMsg("Email is not found !!! Try with another or Signup");
           } else {
             setOtp(true);
+            toast.success(
+              "An OTP has sended to your Email. Please check it...",
+              {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              }
+            );
           }
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err) => {
+          console.log(err);
         });
     }
   }
@@ -52,7 +65,9 @@ const ForgotPassContent = () => {
         </p>
         <form className="text-left ml-14">
           <div id="scss" className="text-center z-10   text-[#53ec45] "></div>
-          <div id="errrr" className="text-[#dc2626]"></div>
+          <div id="errrr" className="text-[#dc2626] text-center">
+            {errMsg}
+          </div>
           <label>
             Email
             <br />

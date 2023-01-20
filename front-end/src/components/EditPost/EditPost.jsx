@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { GrImage, GrLocation } from "react-icons/gr";
-import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import { AiOutlineCloseCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { useEffect } from "react";
 import Loader from "../Loader/Loader";
+import { toast } from "react-toastify";
 
 const Register_style = {
   position: "fixed",
@@ -61,8 +62,8 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
         setUrl1(data.post.images.url);
         setUrl2(data.post.resImage.url);
       })
-      .catch(err => {
-        console.log(err)
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -84,8 +85,8 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
           .then((data) => {
             setUrl1(data.url);
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
         setAdd(false);
       } else {
@@ -112,8 +113,8 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
           .then((data) => {
             setUrl2(data.url);
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
         setRest(false);
       } else {
@@ -154,8 +155,8 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
           .then((data) => {
             setUrl1(data.url);
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
       }
 
@@ -173,8 +174,8 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
           .then((data) => {
             setUrl2(data.url);
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
       }
 
@@ -201,13 +202,23 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
             setTimeout(() => {
               setLoader(false);
               onClose();
+              toast.success("Post edited successfully...", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
             }, 1000);
           } else {
             setLoader(false);
           }
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err) => {
+          console.log(err);
         });
     }
   }
@@ -233,32 +244,32 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
           <div className="flex  ml-12">
             {!add ? (
               <>
-              <AiOutlinePlusCircle
-                id="my-element" 
-                data-tooltip-content="Add food image..."
-                className="h-10 w-10 my-auto mr-3 cursor-pointer"
-                onClick={addContent}
-              />
-              <ReactTooltip anchorId="my-element" />
+                <AiOutlinePlusCircle
+                  id="my-element"
+                  data-tooltip-content="Add food image..."
+                  className="h-10 w-10 my-auto mr-3 cursor-pointer"
+                  onClick={addContent}
+                />
+                <ReactTooltip anchorId="my-element" />
               </>
             ) : (
               <>
-              <AiOutlineCloseCircle
-                id="my-element2" 
-                data-tooltip-content="Close..."
-                className="h-10 w-10 my-auto mr-3 cursor-pointer"
-                onClick={addContent}
-              />
-              <ReactTooltip anchorId="my-element2" />
+                <AiOutlineCloseCircle
+                  id="my-element2"
+                  data-tooltip-content="Close..."
+                  className="h-10 w-10 my-auto mr-3 cursor-pointer"
+                  onClick={addContent}
+                />
+                <ReactTooltip anchorId="my-element2" />
               </>
             )}
             {!add ? null : (
               <div className="fixed bg-white flex ml-16">
                 <label for="foodImg">
-                  <GrImage 
-                    className="h-6 w-6 mt-5 ml-2 cursor-pointer" 
-                    id="my-element3" 
-                    data-tooltip-content="Select imgae" 
+                  <GrImage
+                    className="h-6 w-6 mt-5 ml-2 cursor-pointer"
+                    id="my-element3"
+                    data-tooltip-content="Select imgae"
                   />
                   <ReactTooltip anchorId="my-element3" />
                 </label>
@@ -302,32 +313,32 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
           <div className="flex  ml-12">
             {!rest ? (
               <>
-              <AiOutlinePlusCircle
-                id="my-element5" 
-                data-tooltip-content="add image for Restaurant"
-                className="h-10 w-10 my-auto mr-3 cursor-pointer"
-                onClick={resImage}
-              />
-              <ReactTooltip anchorId="my-element5" />
+                <AiOutlinePlusCircle
+                  id="my-element5"
+                  data-tooltip-content="add image for Restaurant"
+                  className="h-10 w-10 my-auto mr-3 cursor-pointer"
+                  onClick={resImage}
+                />
+                <ReactTooltip anchorId="my-element5" />
               </>
             ) : (
               <>
-              <AiOutlineCloseCircle
-                id="my-element6" 
-                data-tooltip-content="Close..."
-                className="h-10 w-10 my-auto mr-3 cursor-pointer"
-                onClick={resImage}
-              />
-              <ReactTooltip anchorId="my-element6" />
+                <AiOutlineCloseCircle
+                  id="my-element6"
+                  data-tooltip-content="Close..."
+                  className="h-10 w-10 my-auto mr-3 cursor-pointer"
+                  onClick={resImage}
+                />
+                <ReactTooltip anchorId="my-element6" />
               </>
             )}
             {!rest ? null : (
               <div className="fixed bg-white flex ml-16">
                 <label for="restImg">
-                  <GrImage 
-                    id="my-element4" 
+                  <GrImage
+                    id="my-element4"
                     data-tooltip-content="Add image"
-                    className="h-6 w-6 mt-5 ml-2 cursor-pointer" 
+                    className="h-6 w-6 mt-5 ml-2 cursor-pointer"
                   />
                 </label>
                 <ReactTooltip anchorId="my-element4" />
@@ -371,14 +382,14 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
           />
         </form>
         <button
-          id="my-element7" 
+          id="my-element7"
           data-tooltip-content="Edit Post..."
           className="px-3 py-2 mt-5 mb-8 mx-12 bg-[#fbcfe8] hover:bg-[#db2777] hover:text-white"
           onClick={editPost}
         >
           Edit Post
         </button>
-        <ReactTooltip anchorId="my-element7"  />
+        <ReactTooltip anchorId="my-element7" />
       </div>
     </>
   );

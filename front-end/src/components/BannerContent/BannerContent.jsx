@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import AdminConfirm from "../AdminConfirm/AdminConfirm";
 import ContentLoader from "../Loader/ContentLoader";
 import NewBanner from "../NewBanner/NewBanner";
+import DeleteButton from "./DeleteButton";
 
 const BannerContent = () => {
   const [banner, setBanner] = useState(false);
@@ -58,23 +60,6 @@ const BannerContent = () => {
         setLoading(false);
       }, 1500);
     }
-  };
-
-  const deleteBanner = (id) => {
-    fetch(`${process.env.REACT_APP_BASEURL}/admin/deleteBanner/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "ok") {
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      });
   };
 
   let i = 0;
@@ -145,14 +130,7 @@ const BannerContent = () => {
                 <td className="border border-slate-300  px-4">
                   {banner.expiresAt}
                 </td>
-                <td className="border border-slate-300  px-4">
-                  <button
-                    className="border-2 border-rose-600 px-2 rounded-md text-[#dc2626] hover:bg-[#dc2626] hover:text-white"
-                    onClick={() => deleteBanner(banner._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
+                <DeleteButton banner={banner} />
               </tr>
             );
             i++;

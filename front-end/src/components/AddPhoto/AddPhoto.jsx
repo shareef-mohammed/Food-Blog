@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Loader from "../Loader/Loader";
+import { toast } from "react-toastify";
 
 const Register_style = {
   position: "fixed",
@@ -56,13 +57,23 @@ const AddPhoto = ({ open, onClose, id }) => {
               setTimeout(() => {
                 setLoader(false);
                 onClose();
+                toast.success("Profile picture updated successfully...", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                });
               }, 1000);
             } else {
               setLoader(false);
             }
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
       });
   };

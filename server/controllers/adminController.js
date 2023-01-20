@@ -98,7 +98,7 @@ exports.banners = async (req, res) => {
   try {
     const skip = req.query.skip ? Number(req.query.skip) : 0;
     const DEFAULT_LIMIT = 10;
-    const data = await bannerData.find({}).skip(skip).limit(DEFAULT_LIMIT);
+    const data = await bannerData.find({}).sort({createdAt: -1}).skip(skip).limit(DEFAULT_LIMIT);
     res.json({ data });
   } catch (err) {
     console.log(err);
@@ -107,12 +107,12 @@ exports.banners = async (req, res) => {
 
 exports.addBanner = async (req, res) => {
   try {
-    const { foodName, resName, address, offer, url } = req.body;
+    const { foodName, resName, address, offer, code, url } = req.body;
     const newBanner = new bannerData({
       foodName,
       resName,
       offer,
-      // description,
+      code,
       address,
       images: [
         {
@@ -151,7 +151,7 @@ exports.getReports = async (req, res) => {
   try {
     const skip = req.query.skip ? Number(req.query.skip) : 0;
     const DEFAULT_LIMIT = 10;
-    const data = await reportData.find({}).skip(skip).limit(DEFAULT_LIMIT);
+    const data = await reportData.find({}).sort({createdAt: -1}).skip(skip).limit(DEFAULT_LIMIT);
     res.json({ data });
   } catch (err) {
     console.log(err);
@@ -246,3 +246,33 @@ exports.userCounts = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.removeReport = async(req, res) => {
+  try {
+    const {id} = req.params;
+    await reportData.findByIdAndDelete(id);
+    res.json({status:'ok'});
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+exports.adminDetails = async(req,res) => {
+  try {
+    const adminToken = req.headers["x-custom-header"];
+    const decode = jwt.verify(adminToken, process.env.JWT_ADMIN_SECRET_KEY)
+    if(decode.type == 'admin') {
+      const admin = await adminData.findById({_id: decode.id})
+      if(admin) {
+        res.json({status:'ok'})
+      } else {
+        res.json({status:'err'})
+      }
+    } else {
+      res.json({status:'err'})
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+}

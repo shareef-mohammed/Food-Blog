@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { logOut, selectCurrentUser } from "../../features/auth/authSlice";
 import Loader from "../Loader/Loader";
 import OtpVerify from "../OtpVerify/OtpVerify";
+import { toast } from "react-toastify";
 
 const Register_style = {
   position: "fixed",
@@ -77,13 +78,23 @@ const ProfileUpdate = ({
                 setLoader(false);
                 onClose();
                 userLogout();
+                toast.success("User name has changed successfully...", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                });
               }, 1000);
             } else {
               setErrMsg("changes are not done...");
             }
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
       }
     }
@@ -109,14 +120,24 @@ const ProfileUpdate = ({
                 setLoader(false);
                 onClose();
                 setInput("");
+                toast.success("Full name has changed successfully...", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                });
               }, 1000);
             } else {
               setLoader(false);
               setErrMsg("changes are not done...");
             }
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
       }
     }
@@ -146,11 +167,21 @@ const ProfileUpdate = ({
                 setLoader(false);
                 setIsOpen(true);
                 setInput("");
+                toast.success("An otp has sended to your Email. Check it...", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                });
               }, 1000);
             }
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
       }
     }
@@ -176,14 +207,24 @@ const ProfileUpdate = ({
                 setLoader(false);
                 onClose();
                 setInput("");
+                toast.success("Phone number changed successfully...", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                });
               }, 1000);
             } else {
               setLoader(false);
               setErrMsg("Changes are not done...");
             }
           })
-          .catch(err => {
-            console.log(err)
+          .catch((err) => {
+            console.log(err);
           });
       }
     }

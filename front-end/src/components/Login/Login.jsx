@@ -5,8 +5,8 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../features/auth/authSlice";
 import { useLoginMutation } from "../../features/auth/authApiSlice";
+import { toast } from "react-toastify";
 import Loader from "../Loader/Loader";
-
 
 const Register_style = {
   position: "fixed",
@@ -34,7 +34,6 @@ const Login = ({ open, onClose }) => {
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [loader, setLoader] = useState(false);
-  
 
   const navigate = useNavigate();
 
@@ -56,8 +55,16 @@ const Login = ({ open, onClose }) => {
       setName("");
       setPassword("");
       onClose();
-      
-      
+      toast.success("Successfully Logged in...", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     } catch (err) {
       if (!err?.originalStatus) {
         setLoader(false);
@@ -93,7 +100,6 @@ const Login = ({ open, onClose }) => {
   if (loader) return <Loader />;
   return (
     <>
-      
       <div style={overlay_style} onClick={onClose} />
       <div style={Register_style} className="grid content-center rounded-md">
         <AiOutlineClose

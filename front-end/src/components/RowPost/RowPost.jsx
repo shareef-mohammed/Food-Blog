@@ -16,7 +16,6 @@ const RowPost = ({ user, home }) => {
 
   useEffect(() => {
     fetchPost();
-    
   }, [skip, reload]);
 
   const fetchPost = async () => {
@@ -32,7 +31,7 @@ const RowPost = ({ user, home }) => {
         return;
       }
 
-      if(home) {
+      if (home) {
         setCategory([...category, ...data]);
       } else {
         setRowPost([...rowPost, ...data]);
@@ -66,16 +65,18 @@ const RowPost = ({ user, home }) => {
 
       return await res.json();
     } else {
-      const res = await fetch(`${process.env.REACT_APP_BASEURL}/posts/categories?skip=${skip}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      const res = await fetch(
+        `${process.env.REACT_APP_BASEURL}/posts/categories?skip=${skip}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return await res.json();
     }
   };
 
-  
   const handleScroll = (e) => {
     const { offsetHeight, scrollTop, scrollHeight } = e.target;
     if (offsetHeight + scrollTop >= scrollHeight) {
@@ -100,7 +101,7 @@ const RowPost = ({ user, home }) => {
     let slider = document.getElementById("slider");
     slider.scrollLeft = slider.scrollLeft - 500;
   };
-  if (rowPost.length === 0 && category.length == 0) {
+  if (rowPost.length === 0 && category.length === 0) {
     return (
       <div className=" relative flex  pt-16 px-16 ">
         <p className="mx-auto text-[#dc2626]">Your Posts will shown here...</p>
@@ -109,88 +110,96 @@ const RowPost = ({ user, home }) => {
   }
 
   return (
-    <div className=" relative flex items-center pt-8 px-16 ">
-      <MdChevronLeft
-        className="opacity-50 cursor-pointer  hover:opacity-100"
-        onClick={slideLeft}
-        size={80}
-      />
-      <div
-        onScroll={handleScroll}
-        id="slider"
-        className="flex scroll overflow-x-scroll  whitespace-nowrap scroll-smooth scrollbar-hide "
-      >
-        {home ? category.map((post, i) => {
-          return (
-            <div className="text-center relative" key={i}>
-              <EditAndDelete
-                post={post}
-                user={user}
-                load={() => {
-                  if (reload) {
-                    setReload(false);
-                  } else {
-                    setReload(true);
-                  }
-                }}
-              />
-              <img
-                className="w-[300px] shadow rounded-3xl h-[200px] inline-block "
-                src={
-                  post.url
-                    ? post.url
-                    : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
-                }
-                alt="/"
-              />
-
-              <h6 className="w-80">{post._id}</h6>
-            </div>
-          );
-        }) :
-        rowPost.map((post, i) => {
-          return (
-            <div className="text-center relative" key={i}>
-              <EditAndDelete
-                post={post}
-                user={user}
-                load={() => {
-                  if (reload) {
-                    setReload(false);
-                  } else {
-                    setReload(true);
-                  }
-                }}
-              />
-              <img
-                className="w-[300px] shadow rounded-3xl h-[200px] inline-block "
-                src={
-                  post.images
-                    ? post.images.url
-                    : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
-                }
-                alt="/"
-              />
-
-              <h6 className="w-80">{post.foodName}</h6>
-            </div>
-          );
-        })}
-        <div className="my-auto">
-          {loading && <ContentLoader />}
-          {isEnd && (
-            <h1 className="text-center py-4 text-[#16a34a]">
-              You have reached the end ...
-            </h1>
-          )}
+    <>
+      {home && (
+        <div className="mt-8 text-center">
+          <p className="text-lg font-bold">Select your favourite food...</p>
         </div>
+      )}
+      <div className=" relative flex items-center pt-4 px-16 ">
+        <MdChevronLeft
+          className="opacity-50 cursor-pointer  hover:opacity-100"
+          onClick={slideLeft}
+          size={90}
+        />
+        <div
+          onScroll={handleScroll}
+          id="slider"
+          className="flex scroll overflow-x-scroll  whitespace-nowrap scroll-smooth scrollbar-hide "
+        >
+          {home
+            ? category.map((post, i) => {
+                return (
+                  <div className="text-center relative" key={i}>
+                    <EditAndDelete
+                      post={post}
+                      user={user}
+                      load={() => {
+                        if (reload) {
+                          setReload(false);
+                        } else {
+                          setReload(true);
+                        }
+                      }}
+                    />
+                    <img
+                      className="w-[300px] shadow rounded-3xl h-[200px] inline-block "
+                      src={
+                        post.url
+                          ? post.url
+                          : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                      }
+                      alt="/"
+                    />
+
+                    <h6 className="w-80">{post._id}</h6>
+                  </div>
+                );
+              })
+            : rowPost.map((post, i) => {
+                return (
+                  <div className="text-center relative" key={i}>
+                    <EditAndDelete
+                      post={post}
+                      user={user}
+                      load={() => {
+                        if (reload) {
+                          setReload(false);
+                        } else {
+                          setReload(true);
+                        }
+                      }}
+                    />
+                    <img
+                      className="w-[300px] shadow rounded-3xl h-[200px] inline-block "
+                      src={
+                        post.images
+                          ? post.images.url
+                          : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                      }
+                      alt="/"
+                    />
+
+                    <h6 className="w-80">{post.foodName}</h6>
+                  </div>
+                );
+              })}
+          <div className="my-auto">
+            {loading && <ContentLoader />}
+            {isEnd && (
+              <h1 className="text-center py-4 text-[#16a34a]">
+                You have reached the end ...
+              </h1>
+            )}
+          </div>
+        </div>
+        <MdChevronRight
+          className="cursor-pointer opacity-50 hover:opacity-100"
+          onClick={slideRight}
+          size={90}
+        />
       </div>
-      <MdChevronRight
-        className="cursor-pointer opacity-50 hover:opacity-100"
-        onClick={slideRight}
-        size={80}
-      />
-    </div>
+    </>
   );
 };
 

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import ContentLoader from "../Loader/ContentLoader";
+import ReportTable from "./ReportTable";
 
 const ReportManContent = () => {
   const [reports, setReports] = useState([]);
-  let i = 0;
-
   const [skip, setSkip] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -84,31 +83,11 @@ const ReportManContent = () => {
             <th className="border border-slate-300 px-4">User Name/ Email</th>
             <th className="border border-slate-300 px-4">Reported User Name</th>
             <th className="border border-slate-300 px-4">Report</th>
+            <th className="border border-slate-300 px-4">Date</th>
+            <th className="border border-slate-300 px-4">Action</th>
           </tr>
         </thead>
-        <tbody>
-          {reports.map((report, index) => {
-            return (
-              <tr key={index}>
-                <td className="border border-slate-300  px-4 py-2">{++i}</td>
-                <td className="border border-slate-300  px-4">
-                  {" "}
-                  {report.postId}
-                </td>
-                <td className="border border-slate-300  px-4">
-                  {report.userId}{" "}
-                </td>
-                <td className="border border-slate-300  px-4">
-                  {report.reportedUser}
-                </td>
-                <td className="border border-slate-300  px-4">
-                  {report.report}
-                </td>
-              </tr>
-            );
-            i++;
-          })}
-        </tbody>
+        <ReportTable reports={reports} />
       </table>
       {loading && <ContentLoader />}
       {isEnd && (

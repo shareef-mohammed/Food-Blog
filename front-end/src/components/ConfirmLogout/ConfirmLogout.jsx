@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import Loader from "../Loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineClose } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const Register_style = {
   position: "fixed",
@@ -39,6 +40,16 @@ const ConfirmLogout = ({ open, onClose }) => {
       dispatch(logOut());
       navigate("/");
       setLoader(false);
+      toast.success("Successfully logged out...", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }, 1000);
   }
 
@@ -46,7 +57,7 @@ const ConfirmLogout = ({ open, onClose }) => {
   if (loader) return <Loader />;
   return (
     <>
-      <div style={overlay_style} />
+      <div style={overlay_style} onClick={onClose} />
       <div style={Register_style} className="grid content-center rounded-md">
         <AiOutlineClose
           className="ml-auto w-5 h-5 cursor-pointer"

@@ -347,6 +347,7 @@ exports.reportPost = async (req, res) => {
   try {
     const postId = req.params.id;
     const { postedUser, reportedUser, report } = req.body;
+    
     if (!postId || !postedUser || !reportedUser) {
       return res.json({ status: "wrongErr" });
     }

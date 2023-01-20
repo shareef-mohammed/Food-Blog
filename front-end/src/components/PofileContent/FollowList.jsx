@@ -27,37 +27,41 @@ const FollowList = ({ open, onClose, followers }) => {
   return (
     <>
       <div style={overlay_style} onClick={onClose} />
-      <div
-        style={Register_style}
-        className="max-h-96 overflow-scroll scrollbar-hide rounded-lg"
-      >
+      <div style={Register_style}>
         <AiOutlineClose className="ml-auto cursor-pointer" onClick={onClose} />
         <p className="text-lg font-semibold">Followers</p>
-        {followers ? 
-        <>
-          {followers.map((follower) => {
-          return follower.followers.map((follow) => {
-            return (
-              <div className="flex justify-left ml-3 my-3">
-                <img
-                  className="rounded-full w-12 h-12 "
-                  src={
-                    follow.profilePic
-                      ? follow.profilePic
-                      : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-                  }
-                />
-                <div className="text-left ml-2 ">
-                  <p className="font-semibold">{follow.userName}</p>
-                  <p className="text-sm">{follow.fullName}</p>
-                </div>
-              </div>
-            );
-          });
-        })}
-        </> : <>
-          <p className="text-sm mt-2 text-[#dc2626]">Your followers shown will here...</p>
-        </>}
+        <div className="max-h-96 overflow-scroll scrollbar-hide rounded-lg">
+          {followers ? (
+            <>
+              {followers.map((follower) => {
+                return follower.followers.map((follow) => {
+                  return (
+                    <div className="flex justify-left ml-3 my-3">
+                      <img
+                        className="rounded-full w-12 h-12 "
+                        src={
+                          follow.profilePic
+                            ? follow.profilePic
+                            : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                        }
+                      />
+                      <div className="text-left ml-2 ">
+                        <p className="font-semibold">{follow.userName}</p>
+                        <p className="text-sm">{follow.fullName}</p>
+                      </div>
+                    </div>
+                  );
+                });
+              })}
+            </>
+          ) : (
+            <>
+              <p className="text-sm mt-2 text-[#dc2626]">
+                Your followers shown will here...
+              </p>
+            </>
+          )}
+        </div>
       </div>
     </>
   );

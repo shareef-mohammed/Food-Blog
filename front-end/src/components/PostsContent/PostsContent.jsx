@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BsArrowRightCircleFill, BsFillStarFill } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {
-  selectCurrentUser,
-} from "../../features/auth/authSlice";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 
 import ContentLoader from "../Loader/ContentLoader";
 import Loader from "../Loader/Loader";
@@ -18,14 +16,14 @@ const PostsContent = ({ home, category, page }) => {
   const [skip, setSkip] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState(false)
+  const [filter, setFilter] = useState(false);
   const [query, setQuery] = useState("");
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
 
-  const params = useParams()
-  const cate = params.id
+  const params = useParams();
+  const cate = params.id;
   const navigate = useNavigate();
- 
+
   const [user, setUser] = useState("");
 
   const token = useSelector(selectCurrentUser);
@@ -41,40 +39,43 @@ const PostsContent = ({ home, category, page }) => {
       .then((data) => {
         setUser(data.details);
       })
-      .catch(err => {
-        console.log(err)
+      .catch((err) => {
+        console.log(err);
       });
   }, [token]);
 
-  const locationFilter = useCallback(async(location) => {
-    setLoader(true)
-    await fetch(`${process.env.REACT_APP_BASEURL}/posts/filteredPosts?skip=${skip}&q=${query}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "X-Custom-Header": `${location}`,
-      },
-    })
-    .then(res => res.json())
-    .then(data => {
-      setTimeout(() => {
-        setLoader(false)
-        setPosts([...data.data, ...posts])
-      }, 500);
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  })
+  const locationFilter = useCallback(async (location) => {
+    setLoader(true);
+    await fetch(
+      `${process.env.REACT_APP_BASEURL}/posts/filteredPosts?skip=${skip}&q=${query}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Custom-Header": `${location}`,
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setTimeout(() => {
+          setLoader(false);
+          setPosts([...data.data, ...posts]);
+        }, 500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   useEffect(() => {
-    if(!filter){
+    if (!filter) {
       fetchPost();
     }
-  }, [skip, query ]);
+  }, [skip, query]);
 
   const read = async (skip) => {
-    if(category) {
-      const res = await fetch (
+    if (category) {
+      const res = await fetch(
         `${process.env.REACT_APP_BASEURL}/posts/singleCategory/${cate}?skip=${skip}&q=${query}`,
         {
           headers: {
@@ -82,12 +83,9 @@ const PostsContent = ({ home, category, page }) => {
           },
         }
       );
-      return await res.json()
-
-    } else if(home) {
-      
-      if(token) {
-        
+      return await res.json();
+    } else if (home) {
+      if (token) {
         const res = await fetch(
           `${process.env.REACT_APP_BASEURL}/user/homePosts?skip=${skip}&q=${query}`,
           {
@@ -107,11 +105,11 @@ const PostsContent = ({ home, category, page }) => {
             },
           }
         );
-    
+
         return await res.json();
       }
-  
-    } {
+    }
+    {
       const res = await fetch(
         `${process.env.REACT_APP_BASEURL}/user/allPosts?skip=${skip}&q=${query}`,
         {
@@ -120,12 +118,11 @@ const PostsContent = ({ home, category, page }) => {
           },
         }
       );
-  
+
       return await res.json();
     }
   };
 
-  
   const fetchPost = async () => {
     try {
       const { data, error } = await read(skip);
@@ -138,7 +135,7 @@ const PostsContent = ({ home, category, page }) => {
         setIsEnd(true);
         return;
       }
-      
+
       if (!query) {
         setPosts([...posts, ...data]);
       } else {
@@ -148,7 +145,7 @@ const PostsContent = ({ home, category, page }) => {
       console.log(error.message);
     }
   };
-  
+
   const handleScroll = (e) => {
     const { offsetHeight, scrollTop, scrollHeight } = e.target;
     if (offsetHeight + scrollTop >= scrollHeight) {
@@ -172,8 +169,7 @@ const PostsContent = ({ home, category, page }) => {
     });
   };
 
-  
-  if(loader) return <Loader />
+  if (loader) return <Loader />;
   return (
     <>
       {home ? (
@@ -181,15 +177,20 @@ const PostsContent = ({ home, category, page }) => {
       ) : (
         <>
           <div className="max-w-[1280px] mx-auto px-4 my-4 relative flex  items-center">
-          <input
-            className="mx-auto border-2 md:w-[50%] sm:w-[90%] py-1 pl-2 text-lg rounded-xl"
-            type="text"
-            placeholder="Search here for posts..."
-            onChange={(e) => setQuery(e.target.value)}
+            <input
+              className="mx-auto border-2 md:w-[50%] sm:w-[90%] py-1 pl-2 text-lg rounded-xl"
+              type="text"
+              placeholder="Search here for posts..."
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+          {user && <LocateButton page={page} />}
+          <Filter
+            locationFilter={locationFilter}
+            onFilter={() => setFilter(true)}
+            offFilter={() => setFilter(false)}
+            handleScroll={handleScroll}
           />
-        </div>
-        <LocateButton page={page} />
-        <Filter locationFilter={locationFilter} onFilter={() => setFilter(true)} offFilter={() => setFilter(false)} handleScroll={handleScroll} />
         </>
       )}
       <div
@@ -204,9 +205,7 @@ const PostsContent = ({ home, category, page }) => {
             You have reached the end ...
           </h1>
         )}
-       
       </div>
-      
     </>
   );
 };
