@@ -55,15 +55,15 @@ const ReportOnPost = ({ user, userId, id, open, onClose, postedUser }) => {
         setLoad(true);
         if (data.status === "wrongErr") {
           setLoad(false);
-          setErrMsg("Something went wrong...");
+          setErrMsg("Something went wrong");
         } else if (data.status === "inputErr") {
           setLoad(false);
-          setErrMsg("Invalid Input ...");
+          setErrMsg("Invalid Input");
         } else {
           setTimeout(() => {
             onClose();
             setLoad(false);
-            toast.success("Your report on post has sended successfully...", {
+            toast.success("Your report on post has sended successfully", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -95,7 +95,7 @@ const ReportOnPost = ({ user, userId, id, open, onClose, postedUser }) => {
         <form>
           <div className="text-center z-10 text-[#dc2626]">{errMsg}</div>
           <label className="py-1 ">
-            Report on this post...
+            Report on this post
             <br />
             <textarea
               className="w-[100%] border-2 mt-2 pl-1"

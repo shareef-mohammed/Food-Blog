@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
+  selectCurrentToken,
   selectCurrentUser,
 } from "../../features/auth/authSlice";
 import { FcCameraAddon } from "react-icons/fc";
@@ -27,9 +28,10 @@ const ProfileContent = () => {
   const [email, setEmail] = useState(false);
   const [phone, setPhone] = useState(false);
   const [del, setDel] = useState(false);
-  const token = useSelector(selectCurrentUser);
+  const name = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASEURL}/user/details`, {
+    fetch(`${process.env.REACT_APP_BASEURL}/user/details/${name}`, {
       headers: {
         "Content-Type": "application/json",
         "X-Custom-Header": `${token}`,
@@ -67,13 +69,13 @@ const ProfileContent = () => {
           onClick={() => setAddPhoto(true)}
           className="absolute cursor-pointer bg-[#fecaca] p-1 w-6 h-6 rounded-md ml-28 mt-3"
           id="my-element8" 
-          data-tooltip-content="Add profile image..."
+          data-tooltip-content="Add profile image"
         />
         <ReactTooltip anchorId="my-element8" place="" />
         {user.profilePic || user.profilePic !== "" ? (
           <>
           <AiFillDelete
-            data-tooltip-content="Remove profile image..."
+            data-tooltip-content="Remove profile image"
             id="my-element9" 
             onClick={() => setDel(true)}
             className="absolute cursor-pointer w-8 h-8 rounded-md opacity-0 mt-12 ml-16 hover:opacity-100 scale-110 ease-in-out duration-300 p-1 bg-[#fecaca]"

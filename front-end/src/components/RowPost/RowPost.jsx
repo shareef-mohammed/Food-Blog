@@ -43,7 +43,7 @@ const RowPost = ({ user, home }) => {
       {
         isEnd && (
           <h1 className="text-center py-4 text-[#16a34a]">
-            You have reached the end ...
+            You have reached the end
           </h1>
         );
       }
@@ -86,6 +86,7 @@ const RowPost = ({ user, home }) => {
         setLoading(true);
       }
       setTimeout(() => {
+        
         setSkip(skip + 6);
         setLoading(false);
       }, 1500);
@@ -104,7 +105,7 @@ const RowPost = ({ user, home }) => {
   if (rowPost.length === 0 && category.length === 0) {
     return (
       <div className=" relative flex  pt-16 px-16 ">
-        <p className="mx-auto text-[#dc2626]">Your Posts will shown here...</p>
+        <p className="mx-auto text-[#dc2626]">Your Posts will shown here</p>
       </div>
     );
   }
@@ -113,7 +114,7 @@ const RowPost = ({ user, home }) => {
     <>
       {home && (
         <div className="mt-8 text-center">
-          <p className="text-lg font-bold">Select your favourite food...</p>
+          <p className="text-lg font-bold">Select your favourite food</p>
         </div>
       )}
       <div className=" relative flex items-center pt-4 px-16 ">
@@ -152,7 +153,7 @@ const RowPost = ({ user, home }) => {
                       alt="/"
                     />
 
-                    <h6 className="w-80">{post._id}</h6>
+                    <h6 className="w-80 text-lg font-bold uppercase">{post._id}</h6>
                   </div>
                 );
               })
@@ -180,7 +181,7 @@ const RowPost = ({ user, home }) => {
                       alt="/"
                     />
 
-                    <h6 className="w-80">{post.foodName}</h6>
+                    <h6 className="w-80 text-lg font-bold uppercase">{post.foodName}</h6>
                   </div>
                 );
               })}
@@ -188,7 +189,7 @@ const RowPost = ({ user, home }) => {
             {loading && <ContentLoader />}
             {isEnd && (
               <h1 className="text-center py-4 text-[#16a34a]">
-                You have reached the end ...
+                You have reached the end
               </h1>
             )}
           </div>

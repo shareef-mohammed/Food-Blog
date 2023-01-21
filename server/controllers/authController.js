@@ -31,15 +31,17 @@ const handleLogin = async (req, res) => {
       {
         UserInfo: {
           user: foundUser._id,
+          type:"user"
         },
       },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "1000s" }
+      { expiresIn: "2d" }
     );
 
     const newRefreshToken = jwt.sign(
       {
         user: foundUser._id,
+        type:"user"
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1000s" }

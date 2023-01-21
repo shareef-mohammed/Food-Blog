@@ -55,7 +55,7 @@ const Login = ({ open, onClose }) => {
       setName("");
       setPassword("");
       onClose();
-      toast.success("Successfully Logged in...", {
+      toast.success("Successfully Logged in", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,

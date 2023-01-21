@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BsArrowRightCircleFill, BsFillStarFill } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../features/auth/authSlice";
+import { selectCurrentToken, selectCurrentUser } from "../../features/auth/authSlice";
 
 import ContentLoader from "../Loader/ContentLoader";
 import Loader from "../Loader/Loader";
@@ -26,10 +26,11 @@ const PostsContent = ({ home, category, page }) => {
 
   const [user, setUser] = useState("");
 
-  const token = useSelector(selectCurrentUser);
+  const name = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASEURL}/user/details`, {
+    fetch(`${process.env.REACT_APP_BASEURL}/user/details/${name}`, {
       headers: {
         "Content-Type": "application/json",
         "X-Custom-Header": `${token}`,
@@ -108,13 +109,13 @@ const PostsContent = ({ home, category, page }) => {
 
         return await res.json();
       }
-    }
-    {
+    } else {
       const res = await fetch(
         `${process.env.REACT_APP_BASEURL}/user/allPosts?skip=${skip}&q=${query}`,
         {
           headers: {
             "Content-Type": "application/json",
+            "X-Custom-Header": `${token}`,
           },
         }
       );
@@ -147,15 +148,17 @@ const PostsContent = ({ home, category, page }) => {
   };
 
   const handleScroll = (e) => {
+    
     const { offsetHeight, scrollTop, scrollHeight } = e.target;
-    if (offsetHeight + scrollTop >= scrollHeight) {
+    if (offsetHeight + scrollTop >= scrollHeight-500) {
+      console.log('jjjj')
       if (isEnd) {
         setLoading(false);
       } else {
         setLoading(true);
       }
-      setTimeout(() => {
-        setSkip(skip + 8);
+      setTimeout(() => {        
+        setSkip(skip + 6);
         setLoading(false);
       }, 1500);
     }
@@ -180,7 +183,7 @@ const PostsContent = ({ home, category, page }) => {
             <input
               className="mx-auto border-2 md:w-[50%] sm:w-[90%] py-1 pl-2 text-lg rounded-xl"
               type="text"
-              placeholder="Search here for posts..."
+              placeholder="Search here for posts"
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
@@ -202,7 +205,7 @@ const PostsContent = ({ home, category, page }) => {
         {loading && <ContentLoader />}
         {isEnd && (
           <h1 className="text-center py-4 text-[#16a34a]">
-            You have reached the end ...
+            You have reached the end
           </h1>
         )}
       </div>

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logOut, selectCurrentUser } from "../../features/auth/authSlice";
+import { logOut, selectCurrentToken, selectCurrentUser } from "../../features/auth/authSlice";
 import Loader from "../Loader/Loader";
 import OtpVerify from "../OtpVerify/OtpVerify";
 import { toast } from "react-toastify";
@@ -43,6 +43,7 @@ const ProfileUpdate = ({
   const [loader, setLoader] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const dispatch = useDispatch();
+  const token = useSelector(selectCurrentToken)
 
   const navigate = useNavigate();
 
@@ -64,6 +65,7 @@ const ProfileUpdate = ({
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "X-Custom-Header": `${token}`,
           },
           body: JSON.stringify({
             input,
@@ -78,7 +80,7 @@ const ProfileUpdate = ({
                 setLoader(false);
                 onClose();
                 userLogout();
-                toast.success("User name has changed successfully...", {
+                toast.success("User name has changed successfully. Login again.", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -90,7 +92,7 @@ const ProfileUpdate = ({
                 });
               }, 1000);
             } else {
-              setErrMsg("changes are not done...");
+              setErrMsg("changes are not done");
             }
           })
           .catch((err) => {
@@ -100,12 +102,13 @@ const ProfileUpdate = ({
     }
     if (fullName) {
       if (fullName.length < 6) {
-        setErrMsg("Full name should greater than 5 letters...");
+        setErrMsg("Full name should greater than 5 letter");
       } else {
         fetch(`${process.env.REACT_APP_BASEURL}/user/updateProfile/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "X-Custom-Header": `${token}`,
           },
           body: JSON.stringify({
             input,
@@ -120,7 +123,7 @@ const ProfileUpdate = ({
                 setLoader(false);
                 onClose();
                 setInput("");
-                toast.success("Full name has changed successfully...", {
+                toast.success("Full name has changed successfully", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -133,7 +136,7 @@ const ProfileUpdate = ({
               }, 1000);
             } else {
               setLoader(false);
-              setErrMsg("changes are not done...");
+              setErrMsg("changes are not done.");
             }
           })
           .catch((err) => {
@@ -151,6 +154,7 @@ const ProfileUpdate = ({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-Custom-Header": `${token}`,
           },
           body: JSON.stringify({
             input,
@@ -167,7 +171,7 @@ const ProfileUpdate = ({
                 setLoader(false);
                 setIsOpen(true);
                 setInput("");
-                toast.success("An otp has sended to your Email. Check it...", {
+                toast.success("An otp has sended to your Email. Check it", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -193,6 +197,7 @@ const ProfileUpdate = ({
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "X-Custom-Header": `${token}`,
           },
           body: JSON.stringify({
             input,
@@ -207,7 +212,7 @@ const ProfileUpdate = ({
                 setLoader(false);
                 onClose();
                 setInput("");
-                toast.success("Phone number changed successfully...", {
+                toast.success("Phone number changed successfully", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -220,7 +225,7 @@ const ProfileUpdate = ({
               }, 1000);
             } else {
               setLoader(false);
-              setErrMsg("Changes are not done...");
+              setErrMsg("Changes are not done.");
             }
           })
           .catch((err) => {

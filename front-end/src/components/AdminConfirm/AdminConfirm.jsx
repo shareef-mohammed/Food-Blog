@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import Loader from "../Loader/Loader";
-import { toast } from 'react-toastify'
+import { toast } from "react-toastify";
 
 const Register_style = {
   position: "fixed",
@@ -24,161 +24,125 @@ const overlay_style = {
   zIndex: 1000,
 };
 
-const AdminConfirm = ({ open, onClose, id, user, block, unblock, banner, report }) => {
+const AdminConfirm = ({
+  open,
+  onClose,
+  id,
+  user,
+  block,
+  unblock,
+  banner,
+  report,
+}) => {
   const [loader, setLoader] = useState(false);
-  const navigate = useNavigate()
-  const token = localStorage.getItem('adminToken')
-  
+  const navigate = useNavigate();
+  const token = localStorage.getItem("adminToken");
+
   useEffect(() => {
-    if(token) {
+    if (token) {
       fetch(`${process.env.REACT_APP_BASEURL}/admin/details`, {
         headers: {
           "Content-Type": "application/json",
           "X-Custom-Header": `${token}`,
         },
       })
-      .then(res => res.json())
-      .then(data => {
-        if(data.status == 'err') {
-          navigate('/Admin/Login')
-        } 
-      })
-    } else {
-      navigate('/Admin/Login')
-    }
-  },[])
-  function adminConfirm() {
-    if(token) {
-      fetch(`${process.env.REACT_APP_BASEURL}/admin/details`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-Custom-Header": `${token}`,
-        },
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.status == 'err') {
-          return navigate('/Admin/Login')
-        }
-      })
-    } else {
-      return navigate('/Admin/Login')
-    }
-    if(user) {
-        if(block) {
-            fetch(`${process.env.REACT_APP_BASEURL}/admin/blockUser/${id}`, {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              })
-                .then((res) => res.json())
-                .then((data) => {
-                  if (data.status === "ok") {
-                    window.location.reload();
-                    toast.error('User has blocked...', {
-                      position: "top-center",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                    });
-                  }
-                })
-                .catch(err => {
-                  console.log(err)
-                });
-        } else {
-            fetch(`${process.env.REACT_APP_BASEURL}/admin/unblockUser/${id}`, {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              })
-                .then((res) => res.json())
-                .then((data) => {
-                  if (data.status === "ok") {
-                    let i = 0;
-                    window.location.reload();
-                    toast.success('User has unblocked successfully...', {
-                      position: "top-center",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                    });
-                  }
-                })
-                .catch(err => {
-                  console.log(err)
-                });
-        }
-    } else if(banner) {
-        fetch(`${process.env.REACT_APP_BASEURL}/admin/deleteBanner/${id}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then((res) => res.json())
-            .then((data) => {
-                
-              if (data.status === "ok") {
-                window.location.reload()
-                toast.error('Banner has removed...', {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "colored",
-                });
-              }
-            })
-            .catch(err => {
-              console.log(err)
-            });
-    } else if(report) {
-        fetch(`${process.env.REACT_APP_BASEURL}/admin/removeReport/${id}`, {
-            method:'DELETE',
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.status === 'ok') {
-                window.location.reload()
-                toast.success('Report has removed...', {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "colored",
-                });
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    } else {
-        setLoader(true)
-        setTimeout(() => {
-            localStorage.removeItem("adminToken");
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status == "err") {
             navigate("/Admin/Login");
-            setLoader(false)
-            toast.success('Successfully logged out...', {
+          }
+        });
+    } else {
+      navigate("/Admin/Login");
+    }
+  }, []);
+  function adminConfirm() {
+    if (token) {
+      fetch(`${process.env.REACT_APP_BASEURL}/admin/details`, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status == "err") {
+            return navigate("/Admin/Login");
+          }
+        });
+    } else {
+      return navigate("/Admin/Login");
+    }
+    if (user) {
+      if (block) {
+        fetch(`${process.env.REACT_APP_BASEURL}/admin/blockUser/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Custom-Header": `${token}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "ok") {
+              window.location.reload();
+              toast.error("User has blocked", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        fetch(`${process.env.REACT_APP_BASEURL}/admin/unblockUser/${id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Custom-Header": `${token}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "ok") {
+              let i = 0;
+              window.location.reload();
+              toast.success("User has unblocked successfully", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    } else if (banner) {
+      fetch(`${process.env.REACT_APP_BASEURL}/admin/deleteBanner/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            window.location.reload();
+            toast.error("Banner has removed", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -188,11 +152,58 @@ const AdminConfirm = ({ open, onClose, id, user, block, unblock, banner, report 
               progress: undefined,
               theme: "colored",
             });
-        }, 500);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (report) {
+      fetch(`${process.env.REACT_APP_BASEURL}/admin/removeReport/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            window.location.reload();
+            toast.success("Report has removed", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setLoader(true);
+      setTimeout(() => {
+        localStorage.removeItem("adminToken");
+        navigate("/Admin/Login");
+        setLoader(false);
+        toast.success("Successfully logged out", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }, 500);
     }
   }
 
-  
   if (!open) return null;
   if (loader) return <Loader />;
   return (
@@ -204,10 +215,30 @@ const AdminConfirm = ({ open, onClose, id, user, block, unblock, banner, report 
           onClick={onClose}
         />
         <h3 className="text-center py-4 text-[24px] font-bold">
-         Confirm {user ? (block ? 'Block User' : 'Unblock User') :banner? 'Delete Banner' :report? 'Remove Report' : 'Logout'}?
+          Confirm{" "}
+          {user
+            ? block
+              ? "Block User"
+              : "Unblock User"
+            : banner
+            ? "Delete Banner"
+            : report
+            ? "Remove Report"
+            : "Logout"}
+          ?
         </h3>
         <div className="flex justify-center">
-          Are you sure to {user ? (block ? 'Block User' : 'Unblock User') :banner? 'delete this Banner' :report? 'remove this Report' : 'Logout'} ..?
+          Are you sure to{" "}
+          {user
+            ? block
+              ? "Block User"
+              : "Unblock User"
+            : banner
+            ? "delete this Banner"
+            : report
+            ? "remove this Report"
+            : "Logout"}{" "}
+          ..?
         </div>
 
         <div className="flex mx-auto">

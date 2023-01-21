@@ -9,6 +9,7 @@ const AdminLoginContent = () => {
   const [errMsg, setErrMsg] = useState("");
   const [load, setLoad] = useState(false);
   const navigate = useNavigate();
+
   function adminLogin() {
     if (!email || !password) {
       setErrMsg("Empty values are not allowed");
@@ -37,7 +38,7 @@ const AdminLoginContent = () => {
               setLoad(false);
               localStorage.setItem("adminToken", data.token);
               navigate("/Admin/Dashboard");
-              toast.success("Successfully logged in...", {
+              toast.success("Successfully logged in", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,

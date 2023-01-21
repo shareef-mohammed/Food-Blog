@@ -3,6 +3,8 @@ import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const Register_style = {
   position: "fixed",
@@ -30,19 +32,21 @@ const AddBio = ({ open, onClose, id }) => {
   const [errMsg, setErrMsg] = useState("");
   const [loader, setLoader] = useState(false);
 
+  const user = useSelector(selectCurrentToken);
   const updateBio = (e) => {
     e.preventDefault();
     if (!bio) {
-      setErrMsg("Fields cannot be empty...");
+      setErrMsg("Fields cannot be empty");
       return;
     }
     if (bio.length < 20) {
-      return setErrMsg("Your Bio must have atleast 20 letters...");
+      return setErrMsg("Your Bio must have atleast 20 letters");
     }
     fetch(`${process.env.REACT_APP_BASEURL}/user/updateBio/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "X-Custom-Header": `${user}`,
       },
       body: JSON.stringify({
         bio,
@@ -55,7 +59,7 @@ const AddBio = ({ open, onClose, id }) => {
           setTimeout(() => {
             setLoader(false);
             onClose();
-            toast.success("Bio added successfully...", {
+            toast.success("Bio added successfully", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -68,7 +72,7 @@ const AddBio = ({ open, onClose, id }) => {
           }, 1000);
         } else {
           setLoader(false);
-          setErrMsg("Changes are not saved...");
+          setErrMsg("Changes are not saved");
         }
       })
       .catch((err) => {
@@ -90,7 +94,7 @@ const AddBio = ({ open, onClose, id }) => {
         <form>
           <div className="text-center z-10 text-[#dc2626]">{errMsg}</div>
           <label className="py-1 ">
-            Add your bio ...
+            Add your bio
             <br />
             <textarea
               className="w-[100%] border-2 mt-2 pl-1"

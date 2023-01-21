@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const Register_style = {
   position: "fixed",
@@ -27,6 +29,7 @@ const overlay_style = {
 const AddPhoto = ({ open, onClose, id }) => {
   const [image, setImage] = useState("");
   const [loader, setLoader] = useState(false);
+  const user = useSelector(selectCurrentToken);
   const uploadImage = (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -45,6 +48,7 @@ const AddPhoto = ({ open, onClose, id }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "X-Custom-Header": `${user}`,
           },
           body: JSON.stringify({
             url,
@@ -57,7 +61,7 @@ const AddPhoto = ({ open, onClose, id }) => {
               setTimeout(() => {
                 setLoader(false);
                 onClose();
-                toast.success("Profile picture updated successfully...", {
+                toast.success("Profile picture updated successfully", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -95,7 +99,7 @@ const AddPhoto = ({ open, onClose, id }) => {
             className="text-center z-10 text-white bg-[#fca5a5]"
           ></div>
           <label className="py-1 ">
-            Select your profile picture and upload...
+            Select your profile picture and upload
             <br />
             <input
               className="w-[100%] border-2 mt-2 pl-1"

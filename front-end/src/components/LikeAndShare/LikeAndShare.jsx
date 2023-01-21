@@ -5,11 +5,13 @@ import { IoMdShareAlt } from "react-icons/io";
 import { RWebShare } from "react-web-share";
 import { TbMessageReport } from "react-icons/tb";
 import ReportOnPost from "../ReportOnPost/ReportOnPost";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const LikeAndShare = ({ id, user, user1, postedUser }) => {
   const [like, setLike] = useState(false);
   const [report, setReport] = useState(false);
-  const userId = user._id
+  const userId = user._id;
   useEffect(() => {
     if (user) {
       const userId = user._id;
@@ -28,11 +30,13 @@ const LikeAndShare = ({ id, user, user1, postedUser }) => {
             setLike(false);
           }
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err) => {
+          console.log(err);
         });
     }
   }, [like]);
+
+  const token = useSelector(selectCurrentToken);
 
   const likePost = () => {
     if (user) {
@@ -41,6 +45,7 @@ const LikeAndShare = ({ id, user, user1, postedUser }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
         },
         body: JSON.stringify({
           userId,
@@ -54,15 +59,13 @@ const LikeAndShare = ({ id, user, user1, postedUser }) => {
             setLike(false);
           }
         })
-        .catch(err => {
-          console.log(err)
+        .catch((err) => {
+          console.log(err);
         });
     } else {
       console.log("not logged in ");
     }
   };
-
-  
 
   return (
     <div className="flex pr-5">
@@ -77,10 +80,14 @@ const LikeAndShare = ({ id, user, user1, postedUser }) => {
           onClick={likePost}
         />
       )}
-      {userId !== user1 ? <TbMessageReport
-        onClick={() => setReport(true)}
-        className="w-6 ml-2 h-6 cursor-pointer"
-      /> : ''}
+      {userId !== user1 ? (
+        <TbMessageReport
+          onClick={() => setReport(true)}
+          className="w-6 ml-2 h-6 cursor-pointer"
+        />
+      ) : (
+        ""
+      )}
       <ReportOnPost
         id={id}
         postedUser={postedUser}
@@ -91,7 +98,7 @@ const LikeAndShare = ({ id, user, user1, postedUser }) => {
       />
       <RWebShare
         data={{
-          text: "Share the post...",
+          text: "Share the post",
           url: `http://localhost:3000/singlePost/${id}`,
           title: "Share Post",
         }}

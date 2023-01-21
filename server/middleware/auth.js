@@ -1,11 +1,14 @@
 require("dotenv").config();
+const JWT = require('jsonwebtoken')
 
 const validateAdminToken = async (req, res, next) => {
+  
   if (req.headers["x-custom-header"]) {
+    
     try {
-      admin = req.headers["x-custom-header"];
-      const decode = JWT.verify(admin, JWT_ADMIN_SECRET_KEY);
-
+      const admin = req.headers["x-custom-header"];
+      const decode = JWT.verify(admin, process.env.JWT_ADMIN_SECRET_KEY);
+      
       const type = decode.type;
       if (type === "admin") {
         next();
@@ -18,4 +21,28 @@ const validateAdminToken = async (req, res, next) => {
   }
 };
 
+const validateUserToken = async (req, res, next) => {
+  
+  if (req.headers["x-custom-header"]) {
+    
+    try {
+      const user = req.headers["x-custom-header"];
+      
+      const decode = JWT.verify(user,process.env.JWT_SECRET_KEY);
+      
+      const type = decode.UserInfo.type;
+      if (type === "user") {
+        next();
+      }
+    } catch (err) {
+      
+      return res.status(200).send({ errormsg: "authentication failed" });
+    }
+  } else {
+    return res.status(200).send({ errormsg: "authentication failed" });
+  }
+};
+
 exports.validateAdminToken = validateAdminToken;
+
+exports.validateUserToken = validateUserToken;

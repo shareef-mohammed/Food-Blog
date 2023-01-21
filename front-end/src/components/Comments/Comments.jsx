@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { format } from "timeago.js";
 import { BsArrowRightCircleFill } from "react-icons/bs";
 import ContentLoader from "../Loader/ContentLoader";
+import { selectCurrentToken } from "../../features/auth/authSlice";
+import { useSelector } from "react-redux";
 
 const Comments = ({ user, pos, id }) => {
   const [comments, setComments] = useState([]);
@@ -10,6 +12,8 @@ const Comments = ({ user, pos, id }) => {
   const [isEnd, setIsEnd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [skip, setSkip] = useState(0);
+  const token = useSelector(selectCurrentToken)
+
 
   useEffect(() => {
     fetchPost();
@@ -23,6 +27,7 @@ const Comments = ({ user, pos, id }) => {
       {
         headers: {
           "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
         },
       }
     );
@@ -69,6 +74,7 @@ const Comments = ({ user, pos, id }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-Custom-Header": `${token}`,
       },
       body: JSON.stringify({
         userI,
@@ -88,7 +94,7 @@ const Comments = ({ user, pos, id }) => {
       <div className="w-100 flex justify-center pt-4">
         <input
           className="bg-[#f3f4f6] w-[80%] h-12 rounded-2xl pl-3"
-          placeholder="Comment on this post..."
+          placeholder="Comment on this post"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
@@ -131,7 +137,7 @@ const Comments = ({ user, pos, id }) => {
         {loading && <ContentLoader />}
         {isEnd && (
           <h1 className="text-center py-4 text-[#16a34a]">
-            You have reached the end ...
+            You have reached the end
           </h1>
         )}
       </div>

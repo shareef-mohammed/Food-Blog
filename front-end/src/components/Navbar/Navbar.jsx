@@ -36,10 +36,10 @@ const Navba = ({ home, posts, profile }) => {
   useEffect(() => {
     
     if(token) {
-      fetch(`${process.env.REACT_APP_BASEURL}/user/details`, {
+      fetch(`${process.env.REACT_APP_BASEURL}/user/details/${name}`, {
         headers: {
           "Content-Type": "application/json",
-          "X-Custom-Header": `${name}`,
+          "X-Custom-Header": `${token}`,
         },
       })
         .then((res) => res.json())

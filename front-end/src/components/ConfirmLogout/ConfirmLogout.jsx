@@ -40,7 +40,7 @@ const ConfirmLogout = ({ open, onClose }) => {
       dispatch(logOut());
       navigate("/");
       setLoader(false);
-      toast.success("Successfully logged out...", {
+      toast.success("Successfully logged out", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -69,7 +69,7 @@ const ConfirmLogout = ({ open, onClose }) => {
         <div className="flex justify-center">
           <p>
             Are you sure to <span className="px-1 text-[#dc2626]">Logout </span>
-            ... ?
+            .. ?
           </p>
         </div>
 

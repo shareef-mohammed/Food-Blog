@@ -31,6 +31,7 @@ const NewBanner = ({ open, onClose }) => {
   const [address, setAddress] = useState("");
   const [code, setCode] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const token = localStorage.getItem('adminToken')
 
   function addBanner() {
     if (!foodName || !resName || !offer || !image) {
@@ -38,7 +39,7 @@ const NewBanner = ({ open, onClose }) => {
     }
     if (code) {
       if (code.length < 5) {
-        return setErrMsg("Enter a valid code....");
+        return setErrMsg("Enter a valid code");
       }
     }
     const data = new FormData();
@@ -57,6 +58,7 @@ const NewBanner = ({ open, onClose }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "X-Custom-Header": `${token}`,
           },
           body: JSON.stringify({
             foodName,
@@ -70,7 +72,7 @@ const NewBanner = ({ open, onClose }) => {
           .then((res) => res.json())
           .then((data) => {
             onClose();
-            toast.success("Banner added successfully...", {
+            toast.success("Banner added successfully", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,

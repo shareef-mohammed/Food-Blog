@@ -43,7 +43,7 @@ const UserTable = ({ data }) => {
             })}
           </tbody>
         ) : (
-          <p>No users available...</p>
+          <p>No users available</p>
         )}
       </table>
     </>

@@ -15,13 +15,14 @@ const UserManContent = () => {
   useEffect(() => {
     fetchPost();
   }, [skip, query]);
-
+  const token = localStorage.getItem('adminToken')
   const read = async (skip) => {
     const res = await fetch(
       `${process.env.REACT_APP_BASEURL}/admin/userDetails?skip=${skip}&q=${query}`,
       {
         headers: {
           "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
         },
       }
     );
@@ -84,7 +85,7 @@ const UserManContent = () => {
         <input
           type="text"
           className="w-96 h-10 pl-2 my-4 border-2 rounded-md"
-          placeholder="Search here ..."
+          placeholder="Search here"
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
@@ -92,7 +93,7 @@ const UserManContent = () => {
       {loading && <ContentLoader />}
       {isEnd && (
         <h1 className="text-center py-4 text-[#16a34a]">
-          You have reached the end ...
+          You have reached the end
         </h1>
       )}
     </div>

@@ -32,19 +32,16 @@ const ForgotPassContent = () => {
             setErrMsg("Email is not found !!! Try with another or Signup");
           } else {
             setOtp(true);
-            toast.success(
-              "An OTP has sended to your Email. Please check it...",
-              {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-              }
-            );
+            toast.success("An OTP has sended to your Email. Please check it.", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
           }
         })
         .catch((err) => {
@@ -58,7 +55,7 @@ const ForgotPassContent = () => {
     <div className="mx-auto max-w-[1240px]">
       <div className="w-96 mt-16 mx-auto border shadow text-center rounded-lg bg-[#fff]">
         <p className="text-lg font-bold py-5"> Forgot Password ..?</p>
-        <p className="pb-2">Do you forgot your Password...?</p>
+        <p className="pb-2">Do you forgot your Password..?</p>
         <p className="px-4 pb-3 text-left">
           Please enter your Email Id. We will provide an OTP to check is that
           you or not.

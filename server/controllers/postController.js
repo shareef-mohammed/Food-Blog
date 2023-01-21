@@ -106,8 +106,41 @@ exports.allPosts = async (req, res) => {
     let skip = req.query.skip ? Number(req.query.skip) : 0;
     let DEFAULT_LIMIT = 6;
     const q = req.query.q;
+    const user = req.headers["x-custom-header"];
+    const username = await userData.findOne({ userName: user });
+    const userEmail = await userData.findOne({ email: user });
 
-    const posts = await postData.aggregate([
+    let location;
+    if (username) {
+      location = username.location;
+    } else if (userEmail) {
+      location = userEmail.location;
+    } else {
+      location = "";
+    }
+    
+    const post1 = await postData.aggregate([
+      {
+        $match:{
+          address: location
+        }
+      },
+      {
+        $sort: {
+          updatedAt: -1,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "details",
+        },
+      },
+    ])
+    
+    const post = await postData.aggregate([
       {
         $sort: {
           updatedAt: -1,
@@ -123,6 +156,13 @@ exports.allPosts = async (req, res) => {
       },
     ]);
 
+    let posts
+    if(user) {
+      posts = [...post1, ...post]
+    } else {
+      posts = [...post]
+    }
+
     const keys = ["foodName", "resName"];
 
     const search = (data) => {
@@ -131,7 +171,7 @@ exports.allPosts = async (req, res) => {
       });
     };
     const data = search(posts).splice(skip, DEFAULT_LIMIT);
-
+    
     res.json({ data });
   } catch (err) {
     console.log(err);
@@ -384,7 +424,7 @@ exports.locations = async(req,res) => {
 exports.categories = async(req,res) => {
   try {
     const skip = req.query.skip ? Number(req.query.skip) : 0;
-    const DEFAULT_LIMIT = 10;
+    const DEFAULT_LIMIT = 6;
     const data = await postData.aggregate([{
       $group: {
         _id: '$foodName',

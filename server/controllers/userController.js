@@ -205,8 +205,9 @@ exports.updateProfile = async (req, res) => {
 
 exports.userDetails = async (req, res) => {
   try {
-    if (req.headers["x-custom-header"]) {
-      const user = req.headers["x-custom-header"];
+    
+    if (req.params.id) {
+      const user = req.params.id;
       const username = await userData.findOne({ userName: user });
       const userEmail = await userData.findOne({ email: user });
 
@@ -317,7 +318,7 @@ exports.followersDetails = async (req, res) => {
 
 exports.followers = async (req, res) => {
   try {
-    const user = req.headers["x-custom-header"];
+    const user = req.params.id
     const username = await userData.findOne({ userName: user });
     const userEmail = await userData.findOne({ email: user });
 

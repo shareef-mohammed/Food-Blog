@@ -21,17 +21,17 @@ const {
 const auth = require("../middleware/auth");
 
 router.post("/adminLogin", adminLogin);
-router.get("/userDetails", userDetails);
-router.put("/blockUser/:id", blockUser);
-router.put("/unblockUser/:id", unblockUser);
-router.get("/banners", banners);
-router.post("/addBanner", addBanner);
-router.delete("/deleteBanner/:id", deleteBanner);
+router.get("/userDetails", auth.validateAdminToken, userDetails);
+router.put("/blockUser/:id", auth.validateAdminToken, blockUser);
+router.put("/unblockUser/:id", auth.validateAdminToken, unblockUser);
+router.get("/banners", auth.validateAdminToken, banners);
+router.post("/addBanner", auth.validateAdminToken, addBanner);
+router.delete("/deleteBanner/:id", auth.validateAdminToken, deleteBanner);
 router.get("/getBanners", getBanners);
-router.get("/getReports", getReports);
+router.get("/getReports", auth.validateAdminToken, getReports);
 router.get("/postChartData", postChartData);
-router.get("/userCounts", userCounts);
-router.delete("/removeReport/:id", removeReport);
-router.get('/details', adminDetails);
+router.get("/userCounts", auth.validateAdminToken, userCounts);
+router.delete("/removeReport/:id", auth.validateAdminToken, removeReport);
+router.get('/details', auth.validateAdminToken, adminDetails);
 
 module.exports = router;

@@ -21,17 +21,19 @@ const {
   filteredPosts,
 } = require("../controllers/postController");
 
-router.post("/user/addPost/:id", addPost);
+const auth = require('../middleware/auth')
+
+router.post("/user/addPost/:id", auth.validateUserToken, addPost);
 router.get("/user/allPosts", allPosts);
 router.get("/user/posts", userPosts);
 router.get("/user/homePosts", homePosts);
-router.get("/user/singlePost/:id", singlePost);
-router.post("/user/likePost/:id", likePost);
-router.post("/user/commentPost/:id", commentPost);
-router.get("/user/postComments/:id", postComments);
-router.get("/user/getPost/:id", getPost);
-router.put("/user/editPost/:id", editPost);
-router.delete("/user/deletePost/:id", deletePost);
+router.get("/user/singlePost/:id", auth.validateUserToken, singlePost);
+router.post("/user/likePost/:id", auth.validateUserToken, likePost);
+router.post("/user/commentPost/:id", auth.validateUserToken, commentPost);
+router.get("/user/postComments/:id", auth.validateUserToken, postComments);
+router.get("/user/getPost/:id", auth.validateUserToken, getPost);
+router.put("/user/editPost/:id", auth.validateUserToken, editPost);
+router.delete("/user/deletePost/:id", auth.validateUserToken, deletePost);
 router.get("/user/getLikeDetails/:id", getLikeDetails);
 router.post("/user/reportPost/:id", reportPost);
 router.get("/posts/locations", locations);

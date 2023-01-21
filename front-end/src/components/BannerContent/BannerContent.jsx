@@ -3,6 +3,7 @@ import AdminConfirm from "../AdminConfirm/AdminConfirm";
 import ContentLoader from "../Loader/ContentLoader";
 import NewBanner from "../NewBanner/NewBanner";
 import DeleteButton from "./DeleteButton";
+import moment from 'moment'
 
 const BannerContent = () => {
   const [banner, setBanner] = useState(false);
@@ -34,12 +35,14 @@ const BannerContent = () => {
     }
   };
 
+  const token = localStorage.getItem("adminToken");
   const read = async (skip) => {
     const res = await fetch(
       `${process.env.REACT_APP_BASEURL}/admin/banners?skip=${skip}`,
       {
         headers: {
           "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
         },
       }
     );
@@ -72,7 +75,7 @@ const BannerContent = () => {
         >
           Add Banner
         </button>
-        <p className="text-[#dc2626]">No Banners available...</p>
+        <p className="text-[#dc2626]">No Banners available</p>
         <NewBanner open={banner} onClose={() => setBanner(false)} />
       </div>
     );
@@ -128,7 +131,7 @@ const BannerContent = () => {
                   {banner.address}
                 </td>
                 <td className="border border-slate-300  px-4">
-                  {banner.expiresAt}
+                  {moment(banner.expiresAt).format("MMM Do YY")}
                 </td>
                 <DeleteButton banner={banner} />
               </tr>
@@ -140,7 +143,7 @@ const BannerContent = () => {
       {loading && <ContentLoader />}
       {isEnd && (
         <h1 className="text-center py-4 text-[#16a34a]">
-          You have reached the end ...
+          You have reached the end
         </h1>
       )}
     </div>

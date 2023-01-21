@@ -3,7 +3,7 @@ import { BsFillStarFill } from "react-icons/bs";
 import { format } from "timeago.js";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../features/auth/authSlice";
+import { selectCurrentToken, selectCurrentUser } from "../../features/auth/authSlice";
 import LikeAndShare from "../LikeAndShare/LikeAndShare";
 import Follow from "../Follow/Follow";
 import Comments from "../Comments/Comments";
@@ -14,12 +14,13 @@ const SinglePostContent = () => {
 
   const [user, setUser] = useState("");
   const token = useSelector(selectCurrentUser);
+  const valid = useSelector(selectCurrentToken);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASEURL}/user/details`, {
+    fetch(`${process.env.REACT_APP_BASEURL}/user/details/${token}`, {
       headers: {
         "Content-Type": "application/json",
-        "X-Custom-Header": `${token}`,
+        "X-Custom-Header": `${valid}`,
       },
     })
       .then((res) => res.json())
@@ -36,6 +37,7 @@ const SinglePostContent = () => {
     fetch(`${process.env.REACT_APP_BASEURL}/user/singlePost/${id}`, {
       headers: {
         "Content-Type": "application/json",
+        "X-Custom-Header": `${valid}`,
       },
     })
       .then((res) => res.json())

@@ -57,7 +57,7 @@ const FollowList = ({ open, onClose, followers }) => {
           ) : (
             <>
               <p className="text-sm mt-2 text-[#dc2626]">
-                Your followers shown will here...
+                Your followers shown will here
               </p>
             </>
           )}

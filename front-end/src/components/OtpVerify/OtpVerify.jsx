@@ -93,7 +93,7 @@ const OtpVerify = ({
           } else if (!forgot) {
             setLoader(false);
             onClose();
-            toast.success("You are successfully registered. Please Login ...", {
+            toast.success("You are successfully registered. Please Login.", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -120,7 +120,7 @@ const OtpVerify = ({
                 if (data.status === "ok") {
                   setLoader(false);
                   onClose();
-                  toast.success("Your Email has successfully changed...", {
+                  toast.success("Your Email has successfully changed", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -141,7 +141,7 @@ const OtpVerify = ({
             setLoader(false);
             setReset(true);
             toast.success(
-              "Verification has done. Please enter new Password...",
+              "Verification has done. Please enter new Password",
               {
                 position: "top-center",
                 autoClose: 5000,
@@ -179,7 +179,7 @@ const OtpVerify = ({
           setMinutes(1);
           setSeconds(30);
           toast.success(
-            "OTP has resended. Check your email...",
+            "OTP has resended. Check your email.",
             {
               position: "top-center",
               autoClose: 5000,

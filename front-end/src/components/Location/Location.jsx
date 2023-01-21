@@ -3,6 +3,8 @@ import { useState } from "react";
 import Loader from "../Loader/Loader";
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { selectCurrentToken, selectCurrentUser } from "../../features/auth/authSlice";
 
 const Register_style = {
   position: "fixed",
@@ -28,6 +30,7 @@ const overlay_style = {
 const Location = ({ opened, onClose, user, button }) => {
   const [places, setPlaces] = useState([]);
   const [load, setLoad] = useState(false);
+  const token = useSelector(selectCurrentToken)
   const id = user._id;
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BASEURL}/posts/Locations`, {
@@ -49,6 +52,7 @@ const Location = ({ opened, onClose, user, button }) => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "X-Custom-Header": `${token}`,
       },
       body: JSON.stringify({
         id,
@@ -62,7 +66,7 @@ const Location = ({ opened, onClose, user, button }) => {
           setTimeout(() => {
             onClose();
             setLoad(false);
-            toast.success("Location added successfully...", {
+            toast.success("Location added successfully", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -90,7 +94,7 @@ const Location = ({ opened, onClose, user, button }) => {
           />
         )}
         <p className="text-xl font-semibold mb-2">
-          Select your preferred Location...
+          Select your preferred Location
         </p>
 
         <div className="grid max-h-96 overflow-scroll scrollbar-hide">

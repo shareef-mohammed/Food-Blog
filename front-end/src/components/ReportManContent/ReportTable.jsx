@@ -1,5 +1,6 @@
 import React from "react";
 import DeleteButton from "./DeleteButton";
+import moment from 'moment'
 
 const ReportTable = ({ reports }) => {
   let i = 0;
@@ -17,7 +18,7 @@ const ReportTable = ({ reports }) => {
             </td>
             <td className="border border-slate-300  px-4">{report.report}</td>
             <td className="border border-slate-300  px-4">
-              {report.createdAt}
+              {moment(report.createdAt).format("MMM Do YY")}
             </td>
             <DeleteButton report={report} />
           </tr>

@@ -6,6 +6,8 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 import { AiOutlineCloseCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const Register_style = {
   position: "fixed",
@@ -43,6 +45,7 @@ const AddPost = ({ open, onClose, id }) => {
   const [address, setAddress] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [loader, setLoader] = useState(false);
+  const user = useSelector(selectCurrentToken);
 
   let url1, url2;
 
@@ -104,20 +107,20 @@ const AddPost = ({ open, onClose, id }) => {
 
   async function storePost() {
     if (!foodName || !desc || !rating || !resName) {
-      setErrMsg("Fields cannot be empty...");
+      setErrMsg("Fields cannot be empty");
     } else if (foodName.length < 3) {
-      setErrMsg("Enter food name with atleast 3 letters...");
+      setErrMsg("Enter food name with atleast 3 letters");
     } else if (desc.length < 20) {
-      setErrMsg("Description must be more than 20 words...");
+      setErrMsg("Description must be more than 20 words");
     } else if (rating > 5 || isNaN(rating)) {
-      setErrMsg("Enter a valid rating for the food...");
+      setErrMsg("Enter a valid rating for the food");
     } else {
       if (contact.length !== 10 || isNaN(contact)) {
-        return setErrMsg("Please enter a valid number to contact...");
+        return setErrMsg("Please enter a valid number to contact");
       }
 
       if (address.length <= 3) {
-        return setErrMsg("Enter a valid address...");
+        return setErrMsg("Enter a valid address");
       }
 
       if (image1) {
@@ -163,6 +166,7 @@ const AddPost = ({ open, onClose, id }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-Custom-Header": `${user}`,
         },
         body: JSON.stringify({
           foodName,
@@ -186,7 +190,7 @@ const AddPost = ({ open, onClose, id }) => {
               setLoader(false);
               onClose();
               window.location.reload();
-              toast.success("Post added successfully...", {
+              toast.success("Post added successfully", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -228,7 +232,7 @@ const AddPost = ({ open, onClose, id }) => {
               <>
                 <AiOutlinePlusCircle
                   id="my-element"
-                  data-tooltip-content="Add food image..."
+                  data-tooltip-content="Add food image"
                   className="h-10 w-10 my-auto mr-3 cursor-pointer"
                   onClick={addContent}
                 />
@@ -238,7 +242,7 @@ const AddPost = ({ open, onClose, id }) => {
               <>
                 <AiOutlineCloseCircle
                   id="my-element2"
-                  data-tooltip-content="Close..."
+                  data-tooltip-content="Close"
                   className="h-10 w-10 my-auto mr-3 cursor-pointer"
                   onClick={addContent}
                 />
@@ -307,7 +311,7 @@ const AddPost = ({ open, onClose, id }) => {
               <>
                 <AiOutlineCloseCircle
                   id="my-element6"
-                  data-tooltip-content="Close..."
+                  data-tooltip-content="Close"
                   className="h-10 w-10 my-auto mr-3 cursor-pointer"
                   onClick={resImage}
                 />
@@ -358,14 +362,14 @@ const AddPost = ({ open, onClose, id }) => {
           <input
             className="w-[70%] ml-4 h-16 focus:outline-none border-none text-[20px]"
             type="text"
-            placeholder="Address of the restaurant (District). . ."
+            placeholder="Address of the restaurant (District)"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
         </form>
         <button
           id="my-element7"
-          data-tooltip-content="Add Post..."
+          data-tooltip-content="Add Post"
           className=" px-3 py-2 mt-5 mb-8 mx-12 bg-[#fbcfe8] hover:bg-[#db2777] hover:text-white"
           onClick={storePost}
         >

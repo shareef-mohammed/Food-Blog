@@ -51,7 +51,7 @@ const ResetPassword = ({ open, email, onClose }) => {
           if (data.status === "ok") {
             onClose();
             navigate("/");
-            toast.success("Password has changed. Login again...", {
+            toast.success("Password has changed. Login again", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,

@@ -2,16 +2,17 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../features/auth/authSlice";
+import { selectCurrentToken, selectCurrentUser } from "../../features/auth/authSlice";
 import FollowList from "./FollowList";
 
 const Followers = () => {
   const [count, setCount] = useState("");
   const [followers, setFollowers] = useState([]);
   const [open, setOpen] = useState(false);
-  const token = useSelector(selectCurrentUser);
+  const user = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken)
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASEURL}/user/followers`, {
+    fetch(`${process.env.REACT_APP_BASEURL}/user/followers/${user}`, {
       headers: {
         "Content-Type": "application/json",
         "X-Custom-Header": `${token}`,

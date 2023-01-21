@@ -76,41 +76,43 @@ const Carousel = () => {
             }
             key={index}
           >
-            <div className="absolute bg-[#a8a29e] rounded-xl bg-opacity-70 ml-28  mt-28 py-6 sm:w-[20rem] md:w-[30rem] flex justify-center">
-              <div className="justify-start">
-                <p className="sm:text-[1rem] md:text-[2.5rem] uppercase text-white font-bold flex ">
-                  <IoFastFoodOutline className="md:mt-2 mx-2 text-[#7f1d1d]" />
-                  {banner.foodName}
-                </p>
-                <p className="sm:text-[0.8rem] md:text-[2rem] text-white font-semibold flex ">
-                  <IoIosRestaurant className="md:mt-2 text-[#7f1d1d] mx-2" />
-                  {banner.resName}
-                </p>
-                <p className="sm:text-[1rem] md:text-[2.5rem] uppercase text-white font-bold flex ">
-                  <MdOutlineLocalOffer className="md:mt-3 mx-2 text-[#7f1d1d] md:w-8 md:h-8" />
-                  {banner.offer} OFF
-                </p>
-                {banner.code && (
-                  <p className="sm:text-[0.8rem] md:text-[2rem] text-white font-semibold flex ">
-                    <BiBarcodeReader className="md:mt-2 mx-2 text-[#7f1d1d]" />
-                    {banner.code}
-                    <p className="border text-[#7f1d1d] text-sm h-5 mt-4 ml-2 rounded-xl px-1">
-                      Use this code
-                    </p>
-                  </p>
-                )}
-                <p className="sm:text-[0.8rem] md:text-[2rem] text-white font-semibold uppercase flex ">
-                  <GoLocation className="md:mt-3 text-[#7f1d1d] mx-2 md:w-6 md:h-6" />
-                  {banner.address}
-                </p>
-              </div>
-            </div>
             {index === slide && (
-              <img
-                className=" w-full h-[500px] rounded-lg"
-                src={banner.images[0].url}
-                alt="/"
-              />
+              <>
+                <div className="absolute bg-[#a8a29e] rounded-xl bg-opacity-70 ml-28  mt-28 py-6 sm:w-[20rem] md:w-[30rem] justify-center">
+                  <div className="justify-start mx-auto w-[75%]">
+                    <p className="sm:text-[1rem] md:text-[2.5rem] uppercase text-white font-bold flex ">
+                      <IoFastFoodOutline className="md:mt-2 mx-2 text-[#7f1d1d]" />
+                      {banner.foodName}
+                    </p>
+                    <p className="sm:text-[0.8rem] md:text-[2rem] text-white font-semibold flex ">
+                      <IoIosRestaurant className="md:mt-2 text-[#7f1d1d] mx-2" />
+                      {banner.resName}
+                    </p>
+                    <p className="sm:text-[1rem] md:text-[2.5rem] uppercase text-white font-bold flex ">
+                      <MdOutlineLocalOffer className="md:mt-3 mx-2 text-[#7f1d1d] md:w-8 md:h-8" />
+                      {banner.offer} OFF
+                    </p>
+                    {banner.code && (
+                      <p className="sm:text-[0.8rem] md:text-[2rem] text-white font-semibold flex ">
+                        <BiBarcodeReader className="md:mt-2 mx-2 text-[#7f1d1d]" />
+                        {banner.code}
+                        <p className="border text-[#7f1d1d] text-sm h-5 mt-4 ml-2 rounded-xl px-1">
+                          Use this code
+                        </p>
+                      </p>
+                    )}
+                    <p className="sm:text-[0.8rem] md:text-[2rem] text-white font-semibold uppercase flex ">
+                      <GoLocation className="md:mt-3 text-[#7f1d1d] mx-2 md:w-6 md:h-6" />
+                      {banner.address}
+                    </p>
+                  </div>
+                </div>
+                <img
+                  className=" w-full h-[500px] rounded-lg"
+                  src={banner.images[0].url}
+                  alt="/"
+                />
+              </>
             )}
           </div>
         );

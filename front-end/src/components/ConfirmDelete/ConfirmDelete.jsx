@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
+import { selectCurrentToken } from "../../features/auth/authSlice";
+import { useSelector } from "react-redux";
 
 const Register_style = {
   position: "fixed",
@@ -25,12 +27,14 @@ const overlay_style = {
 
 const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
   const [loader, setLoader] = useState(false);
+  const token = useSelector(selectCurrentToken);
   const deletePost = () => {
     if (!photo) {
       fetch(`${process.env.REACT_APP_BASEURL}/user/deletePost/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
         },
       })
         .then((res) => res.json())
@@ -41,7 +45,7 @@ const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
               setLoader(false);
               onClose();
               window.location.reload();
-              toast.success("Post has removed...", {
+              toast.success("Post has removed", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -64,6 +68,7 @@ const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
         },
       })
         .then((res) => res.json())
@@ -74,7 +79,7 @@ const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
               setLoader(false);
               onClose();
               load();
-              toast.success("Profile pictrue removed...", {
+              toast.success("Profile pictrue removed", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -110,7 +115,7 @@ const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
         </h3>
         <div className="flex justify-center">
           Are you sure to <p className="px-2 text-[#dc2626]"> DELETE </p> this{" "}
-          {!photo ? "Post" : "Picture"} ... ?
+          {!photo ? "Post" : "Picture"} ..?
         </div>
 
         <div className="flex mx-auto">

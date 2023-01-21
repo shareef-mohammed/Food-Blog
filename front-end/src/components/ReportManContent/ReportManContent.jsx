@@ -32,12 +32,14 @@ const ReportManContent = () => {
     }
   };
 
+  const token = localStorage.getItem('adminToken')
   const read = async (skip) => {
     const res = await fetch(
       `${process.env.REACT_APP_BASEURL}/admin/getReports?skip=${skip}`,
       {
         headers: {
           "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
         },
       }
     );
@@ -64,7 +66,7 @@ const ReportManContent = () => {
     {
       isEnd && (
         <h1 className="text-center py-4 text-[#16a34a]">
-          You have reached the end ...
+          You have reached the end
         </h1>
       );
     }
@@ -92,7 +94,7 @@ const ReportManContent = () => {
       {loading && <ContentLoader />}
       {isEnd && (
         <h1 className="text-center py-4 text-[#16a34a]">
-          You have reached the end ...
+          You have reached the end
         </h1>
       )}
     </div>
