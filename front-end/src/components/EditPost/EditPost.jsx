@@ -46,6 +46,7 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
   const [url2, setUrl2] = useState("");
   const [loader, setLoader] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const [locations,setLocations] = useState([])
 
   const token = useSelector(selectCurrentToken);
 
@@ -70,6 +71,19 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
       .catch((err) => {
         console.log(err);
       });
+
+      fetch(`${process.env.REACT_APP_BASEURL}/posts/Locations`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setLocations(data.location);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   }, []);
 
   async function addContent() {
@@ -208,6 +222,7 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
             setTimeout(() => {
               setLoader(false);
               onClose();
+              setErrMsg('')
               toast.success("Post edited successfully", {
                 position: "top-center",
                 autoClose: 5000,
@@ -378,14 +393,23 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
             onChange={(e) => setContact(e.target.value)}
           />
           <br />
-          (Optional) <br />
-          <input
-            className="w-[70%] ml-4 h-16 focus:outline-none border-none text-[20px]"
+          Select restaurant location
+          <br />
+          <select
+            className="w-[70%] ml-4 mt-2 h-10 rounded-lg focus:outline-none border-none text-[20px]"
             type="text"
-            placeholder="Attatch the address of the restaurant (District) . . ."
+            
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-          />
+          >
+            {
+              locations && locations.map((location, i) => {
+                return(
+                  <option key={i}>{location.name}</option>
+                )
+              })
+            }
+          </select>
         </form>
         <button
           id="my-element7"

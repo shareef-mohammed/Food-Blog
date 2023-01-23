@@ -5,10 +5,12 @@ import { format } from "timeago.js";
 import Loader from "../Loader/Loader";
 import { useNavigate } from "react-router-dom";
 import Filter from "./Filter";
+import UserDetails from "../Follow/UserDetails";
 
 const Posts = ({ user, data }) => {
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
+  // const [details, setDetails] = useState(false)
 
   const singlePost = (id) => {
     setLoader(true);
@@ -36,9 +38,12 @@ const Posts = ({ user, data }) => {
                       : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                   }
                 />
-                <h6 className="pt-1 pl-2 pb-3 text-lg font-semibold">
+                <h6 className="pt-1 pl-2 pb-3 text-lg font-semibold" 
+                // onClick={() => setDetails(true)} 
+                >
                   {post.details[0].userName}
                 </h6>
+                {/* <UserDetails key={i} open={details} onClose={() => setDetails(false)} user={post} /> */}
               </div>
               <h3
                 className="font-medium text-lg uppercase cursor-pointer"

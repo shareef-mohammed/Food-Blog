@@ -45,7 +45,7 @@ const Location = ({ opened, onClose, user, button }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [user]);
 
   const setLocality = (place) => {
     fetch(`${process.env.REACT_APP_BASEURL}/user/setLocality`, {
@@ -80,6 +80,7 @@ const Location = ({ opened, onClose, user, button }) => {
         }
       });
   };
+  console.log(places)
 
   if (load) return <Loader />;
   if (!opened) return null;
@@ -104,10 +105,10 @@ const Location = ({ opened, onClose, user, button }) => {
                 <div
                   key={i}
                   className="m-2 text-center rounded-lg bg-[#00df9a] cursor-pointer"
-                  onClick={() => setLocality(location._id)}
+                  onClick={() => setLocality(location.name)}
                 >
                   <p className="font-semibold py-5 uppercase text-white">
-                    {location._id}
+                    {location.name}
                   </p>
                 </div>
               );

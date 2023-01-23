@@ -92,7 +92,7 @@ const PostsContent = ({ home, category, page }) => {
           {
             headers: {
               "Content-Type": "application/json",
-              "X-Custom-Header": `${token}`,
+              "X-Custom-Header": `${name}`,
             },
           }
         );
@@ -115,7 +115,7 @@ const PostsContent = ({ home, category, page }) => {
         {
           headers: {
             "Content-Type": "application/json",
-            "X-Custom-Header": `${token}`,
+            "X-Custom-Header": `${name}`,
           },
         }
       );

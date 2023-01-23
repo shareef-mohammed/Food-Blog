@@ -16,6 +16,7 @@ import ReportManagement from "./pages/ReportManagement/ReportManagement";
 import SingleCatePosts from "./pages/SingleCatePosts/SingleCatePosts";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LocationManagement from "./pages/LocationManagement/LocationManagement";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/Admin/Dashboard" element={<AdminDashboard />} />
           <Route path="/Admin/UserManagement" element={<AdminUserMan />} />
           <Route path="/Admin/BannerManagement" element={<BannerMan />} />
+          <Route path="/Admin/LocationManagement" element={<LocationManagement /> } />
           <Route
             path="/Admin/ReportManagement"
             element={<ReportManagement />}

@@ -9,12 +9,12 @@ const FilterButtons = ({ locationFilter, opt, onFilter, offFilter }) => {
           onClick={() => {
             setClicked(true);
             onFilter();
-            locationFilter(opt._id);
+            locationFilter(opt.name);
           }}
           className="uppercase m-1 py-1 px-2 border-2 rounded-2xl hover:text-white cursor-pointer text-sm hover:bg-[#525252]"
           
         >
-          {opt._id}
+          {opt.name}
         </p>
       ) : (
         <p

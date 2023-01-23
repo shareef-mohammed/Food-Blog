@@ -42,6 +42,7 @@ const BarChar = () => {
       });
   }, []);
 
+  
   return (
     data.length > 1 && (
       <div className="text-center m-8">
@@ -52,7 +53,7 @@ const BarChar = () => {
             data={data}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
+            <XAxis dataKey="_id" />
             <YAxis />
             <Tooltip />
             <Legend />

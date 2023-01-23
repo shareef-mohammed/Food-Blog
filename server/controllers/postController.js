@@ -3,6 +3,7 @@ const userData = require("../models/userModel");
 const likeData = require("../models/likeModel");
 const commentData = require("../models/commentModel");
 const reportData = require("../models/reportModel");
+const locationData = require("../models/locationModel");
 const mongoose = require("mongoose");
 
 exports.addPost = async (req, res) => {
@@ -28,15 +29,11 @@ exports.addPost = async (req, res) => {
       resImage: {
         url: url2,
       },
-      // location:{
-      //     type:"Point",
-      //     coordinates: [parseFloat(req.body.longitude),parseFloat(req.body.latitude)]
-      // }
     });
     await post.save();
-    res.send(post);
+    res.status(200).send(post);
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -55,7 +52,7 @@ exports.likePost = async (req, res) => {
       await likeData.findOneAndDelete({
         $and: [{ userId: { $eq: userId } }, { postId: { $eq: postId } }],
       });
-      res.json({ status: false });
+      res.status(200).json({ status: false });
     } else {
       const likes = new likeData({
         userId,
@@ -63,10 +60,10 @@ exports.likePost = async (req, res) => {
         like: true,
       });
       await likes.save();
-      res.json({ status: true });
+      res.status(200).json({ status: true });
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -86,7 +83,7 @@ exports.commentPost = async (req, res) => {
         },
         { $push: { comment: comment } }
       );
-      res.send(addToExist);
+      res.status(200).send(addToExist);
     } else {
       const comments = new commentData({
         userId,
@@ -94,10 +91,10 @@ exports.commentPost = async (req, res) => {
         comment,
       });
       await comments.save();
-      res.send(comments);
+      res.status(200).send(comments);
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -172,9 +169,9 @@ exports.allPosts = async (req, res) => {
     };
     const data = search(posts).splice(skip, DEFAULT_LIMIT);
     
-    res.json({ data });
+    res.status(200).json({ data });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -202,9 +199,9 @@ exports.singlePost = async (req, res) => {
         },
       },
     ]);
-    res.json({ post });
+    res.status(200).json({ post });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -232,12 +229,12 @@ exports.userPosts = async (req, res) => {
         .skip(skip)
         .limit(DEFAULT_LIMIT);
 
-      res.json({ data, userId });
+      res.status(200).json({ data, userId });
     } else {
-      console.log("err");
+      res.status(401)
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -246,6 +243,7 @@ exports.homePosts = async (req, res) => {
     const skip = req.query.skip ? Number(req.query.skip) : 0;
     const DEFAULT_LIMIT = 6;
     const user = req.headers["x-custom-header"];
+    console.log(user)
     const username = await userData.findOne({ userName: user });
     const userEmail = await userData.findOne({ email: user });
 
@@ -275,10 +273,11 @@ exports.homePosts = async (req, res) => {
         },
       },
     ]);
+    
       
-    res.json({ data });
+    res.status(200).json({ data });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -315,9 +314,9 @@ exports.postComments = async (req, res) => {
       },
     ]);
 
-    res.json({ data });
+    res.status(200).json({ data });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -326,9 +325,9 @@ exports.getPost = async (req, res) => {
     const { id } = req.params;
 
     const post = await postData.findById(id);
-    res.json({ post });
+    res.status(200).json({ post });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -345,9 +344,9 @@ exports.editPost = async (req, res) => {
         url: req.body.url2,
       },
     });
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -357,9 +356,9 @@ exports.deletePost = async (req, res) => {
     await postData.findByIdAndDelete(id);
     await likeData.deleteMany({ postId: id });
     await commentData.deleteMany({ postId: id });
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -376,10 +375,10 @@ exports.getLikeDetails = async (req, res) => {
     });
 
     if (likes) {
-      res.json({ likes });
+      res.status(200).json({ likes });
     }
   } catch (err) {
-    console.log(err);
+    res.status(401);
   }
 };
 
@@ -402,22 +401,18 @@ exports.reportPost = async (req, res) => {
       report,
     });
     await data.save();
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
 exports.locations = async(req,res) => {
   try {
-    const location = await postData.aggregate([{
-      $group: {
-        _id: '$address',
-      }
-    }])
-    res.json({location})
+    const location = await locationData.find({}).sort({name:1})
+    res.status(200).json({location})
   } catch (err) {
-    console.log(err)
+    res.status(401)
   }
 }
 
@@ -437,9 +432,9 @@ exports.categories = async(req,res) => {
     }])
 
     
-    res.json({data})
+    res.status(200).json({data})
   } catch (err) {
-    console.log(err)
+    res.status(401)
   }
 }
 
@@ -476,9 +471,9 @@ exports.singleCategory = async(req, res) => {
     };
     const data = search(posts).splice(skip, DEFAULT_LIMIT);
 
-    res.json({ data });
+    res.status(200).json({ data });
   } catch (err) {
-    console.log(err)
+    res.status(401)
   }
 }
 
@@ -515,8 +510,8 @@ exports.filteredPosts = async(req, res) => {
     };
     const data = search(posts).splice(skip, DEFAULT_LIMIT);
 
-    res.json({ data });
+    res.status(200).json({ data });
   } catch (err) {
-    console.log(err)
+    res.status(401)
   }
 }

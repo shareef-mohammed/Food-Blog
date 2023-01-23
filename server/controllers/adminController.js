@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const adminData = require("../models/adminModel");
 const userData = require("../models/userModel");
 const postData = require("../models/postModel");
+const locationData = require("../models/locationModel");
 const bannerData = require("../models/bannerModel");
 const reportData = require("../models/reportModel");
 
@@ -36,22 +37,22 @@ exports.adminLogin = async (req, res) => {
           process.env.JWT_ADMIN_SECRET_KEY
         );
 
-        res.json({ token });
+        res.status(200).json({ token });
       } else {
-        res.json({ status: "passErr" });
+        res.status(200).json({ status: "passErr" });
       }
     } else {
-      res.json({ status: "emailErr" });
+      res.status(200).json({ status: "emailErr" });
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
 exports.userDetails = async (req, res) => {
   try {
     const skip = req.query.skip ? Number(req.query.skip) : 0;
-    const DEFAULT_LIMIT = 10;
+    const DEFAULT_LIMIT = 20;
     const q = req.query.q;
 
     const keys = ["userName", "fullName", "email"];
@@ -65,9 +66,9 @@ exports.userDetails = async (req, res) => {
     await userData.deleteMany({ isVerified: false });
     const users = await userData.find({});
     const data = search(users).splice(skip, DEFAULT_LIMIT);
-    res.json({ data });
+    res.status(200).json({ data });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -77,9 +78,9 @@ exports.blockUser = async (req, res) => {
 
     const userId = mongoose.Types.ObjectId(id);
     await userData.findByIdAndUpdate({ _id: userId }, { isBlocked: true });
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -88,9 +89,9 @@ exports.unblockUser = async (req, res) => {
     const { id } = req.params;
     const userId = mongoose.Types.ObjectId(id);
     await userData.findByIdAndUpdate({ _id: userId }, { isBlocked: false });
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -98,10 +99,14 @@ exports.banners = async (req, res) => {
   try {
     const skip = req.query.skip ? Number(req.query.skip) : 0;
     const DEFAULT_LIMIT = 10;
-    const data = await bannerData.find({}).sort({createdAt: -1}).skip(skip).limit(DEFAULT_LIMIT);
-    res.json({ data });
+    const data = await bannerData
+      .find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(DEFAULT_LIMIT);
+    res.status(200).json({ data });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -121,9 +126,9 @@ exports.addBanner = async (req, res) => {
       ],
     });
     await newBanner.save();
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -131,9 +136,9 @@ exports.deleteBanner = async (req, res) => {
   try {
     const { id } = req.params;
     await bannerData.findByIdAndDelete(id);
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -141,9 +146,9 @@ exports.getBanners = async (req, res) => {
   try {
     const banners = await bannerData.find({}).sort({ createdAt: -1 }).limit(3);
 
-    res.json({ banners });
+    res.status(200).json({ banners });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -151,10 +156,14 @@ exports.getReports = async (req, res) => {
   try {
     const skip = req.query.skip ? Number(req.query.skip) : 0;
     const DEFAULT_LIMIT = 10;
-    const data = await reportData.find({}).sort({createdAt: -1}).skip(skip).limit(DEFAULT_LIMIT);
-    res.json({ data });
+    const data = await reportData
+      .find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(DEFAULT_LIMIT);
+    res.status(200).json({ data });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -163,18 +172,8 @@ exports.postChartData = async (req, res) => {
     const data = await postData.aggregate([
       {
         $group: {
-          _id: {
-            month: {
-              $month: "$createdAt",
-            },
-            day: {
-              $dayOfMonth: "$createdAt",
-            },
-          },
-
-          count: {
-            $sum: 1,
-          },
+          _id: { $dateToString: { format: "%m/%d", date: "$createdAt" } },
+          count: { $sum: 1 },
         },
       },
       {
@@ -184,10 +183,8 @@ exports.postChartData = async (req, res) => {
       },
       {
         $project: {
-          date: "$_id.day",
-
           count: 1,
-          _id: 0,
+          _id: 1,
         },
       },
       {
@@ -197,18 +194,8 @@ exports.postChartData = async (req, res) => {
     const users = await userData.aggregate([
       {
         $group: {
-          _id: {
-            month: {
-              $month: "$createdAt",
-            },
-            day: {
-              $dayOfMonth: "$createdAt",
-            },
-          },
-
-          count: {
-            $sum: 1,
-          },
+          _id: { $dateToString: { format: "%m/%d", date: "$createdAt" } },
+          count: { $sum: 1 },
         },
       },
       {
@@ -218,10 +205,8 @@ exports.postChartData = async (req, res) => {
       },
       {
         $project: {
-          date: "$_id.day",
-
           count: 1,
-          _id: 0,
+          _id: 1,
         },
       },
       {
@@ -229,9 +214,9 @@ exports.postChartData = async (req, res) => {
       },
     ]);
 
-    res.json({ data, users });
+    res.status(200).json({ data, users });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -241,38 +226,80 @@ exports.userCounts = async (req, res) => {
       .find({ createdAt: { $gt: Date.now() - 30 * 24 * 60 * 60 * 1000 } })
       .count();
     const totCount = await userData.find({}).count();
-    res.json({ count, totCount });
+    res.status(200).json({ count, totCount });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
-exports.removeReport = async(req, res) => {
+exports.removeReport = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     await reportData.findByIdAndDelete(id);
-    res.json({status:'ok'});
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err)
+    res.status(401)
   }
-}
+};
 
-exports.adminDetails = async(req,res) => {
+exports.adminDetails = async (req, res) => {
   try {
     const adminToken = req.headers["x-custom-header"];
-    const decode = jwt.verify(adminToken, process.env.JWT_ADMIN_SECRET_KEY)
-    if(decode.type == 'admin') {
-      const admin = await adminData.findById({_id: decode.id})
-      if(admin) {
-        res.json({status:'ok'})
+    const decode = jwt.verify(adminToken, process.env.JWT_ADMIN_SECRET_KEY);
+    if (decode.type == "admin") {
+      const admin = await adminData.findById({ _id: decode.id });
+      if (admin) {
+        res.status(200).json({ status: "ok" });
       } else {
-        res.json({status:'err'})
+        res.status(200).json({ status: "err" });
       }
     } else {
-      res.json({status:'err'})
+      res.status(200).json({ status: "err" });
     }
-
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
-}
+};
+
+exports.locations = async (req, res) => {
+  try {
+    const skip = req.query.skip ? Number(req.query.skip) : 0;
+    const DEFAULT_LIMIT = 20;
+    const data = await locationData
+      .find({})
+      .sort({ name: 1 })
+      .skip(skip)
+      .limit(DEFAULT_LIMIT);
+
+    res.status(200).json({ data });
+  } catch (err) {
+    res.status(401)
+  }
+};
+
+exports.addLocation = async (req, res) => {
+  try {
+    const { name } = req.body;
+    const exist = await locationData.findOne({ name });
+    if (exist) {
+      return res.status(200).json({ status: "existErr" });
+    }
+    const location = new locationData({
+      name,
+    });
+    await location.save();
+    res.status(200).json({ status: true });
+  } catch (err) {
+    res.status(401)
+  }
+};
+
+exports.removeLocation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await locationData.findByIdAndDelete(id);
+    res.status(200).json({ status: "ok" });
+  } catch (err) {
+    res.status(401)
+  }
+};

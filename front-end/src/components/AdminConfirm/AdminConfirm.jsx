@@ -33,6 +33,7 @@ const AdminConfirm = ({
   unblock,
   banner,
   report,
+  location
 }) => {
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
@@ -184,6 +185,33 @@ const AdminConfirm = ({
         .catch((err) => {
           console.log(err);
         });
+    } else if(location) {
+      fetch(`${process.env.REACT_APP_BASEURL}/admin/removeLocation/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Custom-Header": `${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            window.location.reload();
+            toast.success("Report has removed", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       setLoader(true);
       setTimeout(() => {
@@ -224,7 +252,8 @@ const AdminConfirm = ({
             ? "Delete Banner"
             : report
             ? "Remove Report"
-            : "Logout"}
+            : location 
+            ? "Remove Location" : "Logout"}
           ?
         </h3>
         <div className="flex justify-center">
@@ -237,7 +266,8 @@ const AdminConfirm = ({
             ? "delete this Banner"
             : report
             ? "remove this Report"
-            : "Logout"}{" "}
+            : location
+            ? "remove this location" : "Logout"}{" "}
           ..?
         </div>
 

@@ -34,9 +34,9 @@ const sendOTPVerificationMail = async ({ _id, email }, req, res) => {
     });
     await newOTPVerification.save();
     await transporter.sendMail(mailOptions);
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 

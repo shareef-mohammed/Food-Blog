@@ -15,9 +15,9 @@ const { sendOTPVerificationMail } = require("../utils/otpMailer");
 
 exports.homePage = async (req, res) => {
   try {
-    res.send("home page");
+    res.status(200).send("home page");
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -69,13 +69,13 @@ exports.register = async (req, res) => {
           sendOTPVerificationMail(data, req, res);
         });
       } else {
-        res.json({ status: "emailExist" });
+        res.status(200).json({ status: "emailExist" });
       }
     } else {
-      res.json({ status: "userExist" });
+      res.status(200).json({ status: "userExist" });
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -97,17 +97,17 @@ exports.otpVerify = async (req, res) => {
         await userData.findOneAndUpdate({ email }, { isVerified: true });
         await userOTPData.findOneAndDelete({ userEmail: email });
         const user = await userData.findOne({ email });
-        res.json({ user });
+        res.status(200).json({ user });
       } else {
-        res.json({ status: "invalid" });
+        res.status(200).json({ status: "invalid" });
       }
     } else {
       await userOTPData.deleteMany({ userEmail: email });
       await userData.findOneAndDelete({ email });
-      res.json({ status: "expired" });
+      res.status(200).json({ status: "expired" });
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -119,7 +119,7 @@ exports.resendOtp = async (req, res) => {
     await userOTPData.deleteMany({ userEmail: email });
     sendOTPVerificationMail({ _id: userId, email }, req, res);
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -131,10 +131,10 @@ exports.forgotPassword = async (req, res) => {
       const userId = user._id;
       sendOTPVerificationMail({ _id: userId, email }, req, res);
     } else {
-      res.json({ status: "notFound" });
+      res.status(200).json({ status: "notFound" });
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -143,9 +143,9 @@ exports.resetPassword = async (req, res) => {
     const { email, password } = req.body;
     const hashedPassword = hashPassword(password);
     await userData.findOneAndUpdate({ email }, { password: hashedPassword });
-    res.send({ status: "ok" });
+    res.status(200).send({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -153,9 +153,9 @@ exports.addProfilePic = async (req, res) => {
   try {
     const { id, url } = req.body;
     const user = await userData.findByIdAndUpdate(id, { url: url });
-    res.send(user);
+    res.status(200).send(user);
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -168,38 +168,38 @@ exports.updateProfile = async (req, res) => {
         const user = await userData.findOne({ userName: input });
         if (!user) {
           await userData.findByIdAndUpdate(id, { userName: input });
-          res.json({ status: "ok" });
+          res.status(200).json({ status: "ok" });
         } else {
-          res.json({ status: "err" });
+          res.status(200).json({ status: "err" });
         }
       } else if (fullName) {
         if (input.length > 6) {
           await userData.findByIdAndUpdate(id, { fullName: input });
-          res.json({ status: "ok" });
+          res.status(200).json({ status: "ok" });
         } else {
-          res.json({ status: "err" });
+          res.status(200).json({ status: "err" });
         }
       } else if (email) {
         const user = await userData.findOne({ email: input });
         if (!user) {
           await userData.findByIdAndUpdate(id, { email: input });
-          res.json({ status: "ok" });
+          res.status(200).json({ status: "ok" });
         } else {
-          res.json({ status: "err" });
+          res.status(200).json({ status: "err" });
         }
       } else if (phone) {
         if (!input.length == 10 || !isNaN(input)) {
           await userData.findByIdAndUpdate(id, { phone: input });
-          res.json({ status: "ok" });
+          res.status(200).json({ status: "ok" });
         } else {
-          res.json({ status: "err" });
+          res.status(200).json({ status: "err" });
         }
       } else {
-        res.json({ status: "error" });
+        res.status(200).json({ status: "error" });
       }
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -214,8 +214,10 @@ exports.userDetails = async (req, res) => {
       let id;
       if (username) {
         id = username._id;
+        username.password = null
       } else if (userEmail) {
         id = userEmail._id;
+        userEmail.password = null
       } else {
         id = "";
       }
@@ -223,15 +225,15 @@ exports.userDetails = async (req, res) => {
       if (id) {
         const details = await userData.findById(id);
 
-        res.json({ details });
+        res.status(200).json({ details });
       } else {
-        res.json({ status: false });
+        res.status(200).json({ status: false });
       }
     } else {
-      res.json({ status: false });
+      res.status(200).json({ status: false });
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -241,7 +243,7 @@ exports.resetEmail = async (req, res) => {
     const _id = req.body.id;
     sendOTPVerificationMail({ _id, email }, req, res);
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -250,9 +252,9 @@ exports.uploadPhoto = async (req, res) => {
     const { id } = req.params;
     const url = req.body.url;
     await userData.findByIdAndUpdate(id, { profilePic: url });
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -261,9 +263,9 @@ exports.updateBio = async (req, res) => {
     const { id } = req.params;
     const bio = req.body.bio;
     await userData.findByIdAndUpdate(id, { bio: bio });
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -271,9 +273,9 @@ exports.deletePhoto = async (req, res) => {
   try {
     const { id } = req.params;
     await userData.findByIdAndUpdate(id, { profilePic: "" });
-    res.json({ status: "ok" });
+    res.status(200).json({ status: "ok" });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -285,21 +287,19 @@ exports.followUser = async (req, res) => {
     const exist = await userData.findById(id);
     if (!exist.followers.includes(userId)) {
       await userData.findByIdAndUpdate(id, { $push: { followers: userId } });
-      res.json({ status: "ok" });
+      res.status(200).json({ status: "ok" });
     } else {
       await userData.findByIdAndUpdate(id, { $pull: { followers: userId } });
-      res.json({ status: "ok" });
+      res.status(200).json({ status: "ok" });
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
 exports.followersDetails = async (req, res) => {
   try {
     const userId = req.params.id;
-    // const userId = mongoose.Types.ObjectId(userI);
-
     const followI = req.headers["x-custom-header"];
     const followId = mongoose.Types.ObjectId(followI);
     const exist = await userData.findOne({ _id: followId });
@@ -307,12 +307,12 @@ exports.followersDetails = async (req, res) => {
     const count = user.followers.length;
 
     if (exist.followers.includes(userId)) {
-      res.json({ status: true, count });
+      res.status(200).json({ status: true, count });
     } else {
-      res.json({ status: false, count });
+      res.status(200).json({ status: false, count });
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -367,9 +367,9 @@ exports.followers = async (req, res) => {
       },
     ]);
 
-    res.json({ count, followers });
+    res.status(200).json({ count, followers });
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -381,19 +381,19 @@ exports.isLocated = async (req, res) => {
     
     if(username ) {
       if (username.location === null ) {
-        res.json({ status: false });
+        res.status(200).json({ status: false });
       } else {
-        res.json({ status: true });
+        res.status(200).json({ status: true });
       }
     } else {
       if( userEmail.location === null) {
-        res.json({ status: false });
+        res.status(200).json({ status: false });
       } else {
-        res.json({ status: true });
+        res.status(200).json({ status: true });
       }
     }
   } catch (err) {
-    console.log(err);
+    res.status(401)
   }
 };
 
@@ -401,8 +401,8 @@ exports.setLocality = async(req,res) => {
   try {
     const {id, place} = req.body;
     await userData.findByIdAndUpdate(id, {location: place});
-    res.json({status:true})
+    res.status(200).json({status:true})
   } catch (err) {
-    console.log(err)
+    res.status(401)
   }
 }

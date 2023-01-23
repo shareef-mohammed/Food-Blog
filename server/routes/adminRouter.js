@@ -16,6 +16,9 @@ const {
   userCounts,
   removeReport,
   adminDetails,
+  locations,
+  addLocation,
+  removeLocation,
 } = require("../controllers/adminController");
 
 const auth = require("../middleware/auth");
@@ -33,5 +36,8 @@ router.get("/postChartData", postChartData);
 router.get("/userCounts", auth.validateAdminToken, userCounts);
 router.delete("/removeReport/:id", auth.validateAdminToken, removeReport);
 router.get('/details', auth.validateAdminToken, adminDetails);
+router.get('/locations', auth.validateAdminToken, locations);
+router.post('/addLocation', auth.validateAdminToken, addLocation);
+router.delete('/removeLocation/:id', auth.validateAdminToken, removeLocation);
 
 module.exports = router;

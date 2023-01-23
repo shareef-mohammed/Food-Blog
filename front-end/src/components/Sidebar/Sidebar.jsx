@@ -4,7 +4,7 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import Loader from "../Loader/Loader";
 import AdminConfirm from "../AdminConfirm/AdminConfirm";
 
-const Sidebar = ({ dashboard, users, banners, reports }) => {
+const Sidebar = ({ dashboard, users, banners, reports, location }) => {
   const [side, setSide] = useState(true);
   const [load, setLoad] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -86,6 +86,23 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
         >
           Report Management
         </h6>
+        <h6
+          className={
+            location
+              ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md"
+              : "py-3 pl-3 cursor-pointer"
+          }
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/LocationManagement");
+              setLoad(false);
+            }, 500);
+          }}
+        >
+          Location Management
+        </h6>
+        
         <h6
           className="py-3 pl-3 cursor-pointer"
           onClick={() => setConfirm(true)}
@@ -172,6 +189,22 @@ const Sidebar = ({ dashboard, users, banners, reports }) => {
           }}
         >
           Report Management
+        </h6>
+        <h6
+          className={
+            location
+              ? "pl-3 cursor-pointer bg-[#06b6d4] py-3 rounded-md"
+              : "py-3 pl-3 cursor-pointer"
+          }
+          onClick={() => {
+            setLoad(true);
+            setTimeout(() => {
+              navigate("/Admin/LocationMangement");
+              setLoad(false);
+            }, 500);
+          }}
+        >
+          Location Management
         </h6>
         <h6
           className="py-3 pl-3 cursor-pointer"

@@ -8,6 +8,7 @@ import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../features/auth/authSlice";
+import { useEffect } from "react";
 
 const Register_style = {
   position: "fixed",
@@ -45,9 +46,25 @@ const AddPost = ({ open, onClose, id }) => {
   const [address, setAddress] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [loader, setLoader] = useState(false);
+  const [locations, setLocations] = useState([]);
   const user = useSelector(selectCurrentToken);
 
   let url1, url2;
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BASEURL}/posts/Locations`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setLocations(data.location);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },[])
 
   async function addContent() {
     if (add === false) {
@@ -342,7 +359,7 @@ const AddPost = ({ open, onClose, id }) => {
             <input
               className="w-[50%] h-16 focus:outline-none border-none text-[20px]"
               type="text"
-              placeholder={rest ? "" : "Tell restaurant name . . ."}
+              placeholder={rest ? "" : "Tell restaurant name"}
               value={resName}
               onChange={(e) => setResName(e.target.value)}
             />
@@ -353,19 +370,28 @@ const AddPost = ({ open, onClose, id }) => {
           <input
             className="w-[70%] ml-4 h-16 focus:outline-none border-none text-[20px]"
             type="text"
-            placeholder="Contact number of restaurant . . ."
+            placeholder="Contact number of restaurant"
             value={contact}
             onChange={(e) => setContact(e.target.value)}
           />
           <br />
-          (Optional) <br />
-          <input
-            className="w-[70%] ml-4 h-16 focus:outline-none border-none text-[20px]"
+          Select restaurant location
+          <br />
+          <select
+            className="w-[70%] ml-4 mt-2 h-10 rounded-lg focus:outline-none border-none text-[20px]"
             type="text"
-            placeholder="Address of the restaurant (District)"
+            
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-          />
+          >
+            {
+              locations && locations.map((location, i) => {
+                return(
+                  <option key={i}>{location.name}</option>
+                )
+              })
+            }
+          </select>
         </form>
         <button
           id="my-element7"
