@@ -4,6 +4,7 @@ import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Register_style = {
   position: "fixed",
@@ -30,6 +31,7 @@ const AddPhoto = ({ open, onClose, id }) => {
   const [image, setImage] = useState("");
   const [loader, setLoader] = useState(false);
   const user = useSelector(selectCurrentToken);
+  const navigate = useNavigate()
   const uploadImage = (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -57,6 +59,10 @@ const AddPhoto = ({ open, onClose, id }) => {
           .then((res) => res.json())
           .then((data) => {
             setLoader(true);
+            if(data.err) {
+              setLoader(false)
+              return navigate('/PageNotFound')
+            }
             if (data.status === "ok") {
               setTimeout(() => {
                 setLoader(false);
@@ -77,7 +83,7 @@ const AddPhoto = ({ open, onClose, id }) => {
             }
           })
           .catch((err) => {
-            console.log(err);
+            navigate('/PageNotFound')
           });
       });
   };

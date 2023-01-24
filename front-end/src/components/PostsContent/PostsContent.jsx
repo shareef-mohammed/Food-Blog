@@ -143,7 +143,7 @@ const PostsContent = ({ home, category, page }) => {
         setPosts([...data]);
       }
     } catch (error) {
-      console.log(error.message);
+      navigate('/PageNotFound')
     }
   };
 

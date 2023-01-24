@@ -4,6 +4,7 @@ import ContentLoader from "../Loader/ContentLoader";
 import NewBanner from "../NewBanner/NewBanner";
 import DeleteButton from "./DeleteButton";
 import moment from 'moment'
+import { useNavigate } from "react-router-dom";
 
 const BannerContent = () => {
   const [banner, setBanner] = useState(false);
@@ -11,6 +12,7 @@ const BannerContent = () => {
   const [skip, setSkip] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchPost();
@@ -31,7 +33,7 @@ const BannerContent = () => {
 
       setBanners([...banners, ...data]);
     } catch (error) {
-      console.log(error.message);
+      navigate('/PageNotFound')
     }
   };
 

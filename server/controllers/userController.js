@@ -17,7 +17,7 @@ exports.homePage = async (req, res) => {
   try {
     res.status(200).send("home page");
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -75,7 +75,7 @@ exports.register = async (req, res) => {
       res.status(200).json({ status: "userExist" });
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -107,7 +107,7 @@ exports.otpVerify = async (req, res) => {
       res.status(200).json({ status: "expired" });
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -119,7 +119,7 @@ exports.resendOtp = async (req, res) => {
     await userOTPData.deleteMany({ userEmail: email });
     sendOTPVerificationMail({ _id: userId, email }, req, res);
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -134,7 +134,7 @@ exports.forgotPassword = async (req, res) => {
       res.status(200).json({ status: "notFound" });
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -145,7 +145,7 @@ exports.resetPassword = async (req, res) => {
     await userData.findOneAndUpdate({ email }, { password: hashedPassword });
     res.status(200).send({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -155,7 +155,7 @@ exports.addProfilePic = async (req, res) => {
     const user = await userData.findByIdAndUpdate(id, { url: url });
     res.status(200).send(user);
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -199,7 +199,7 @@ exports.updateProfile = async (req, res) => {
       }
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -233,7 +233,7 @@ exports.userDetails = async (req, res) => {
       res.status(200).json({ status: false });
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -243,7 +243,7 @@ exports.resetEmail = async (req, res) => {
     const _id = req.body.id;
     sendOTPVerificationMail({ _id, email }, req, res);
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -254,7 +254,7 @@ exports.uploadPhoto = async (req, res) => {
     await userData.findByIdAndUpdate(id, { profilePic: url });
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -265,7 +265,7 @@ exports.updateBio = async (req, res) => {
     await userData.findByIdAndUpdate(id, { bio: bio });
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -275,7 +275,7 @@ exports.deletePhoto = async (req, res) => {
     await userData.findByIdAndUpdate(id, { profilePic: "" });
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -293,7 +293,7 @@ exports.followUser = async (req, res) => {
       res.status(200).json({ status: "ok" });
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -312,7 +312,7 @@ exports.followersDetails = async (req, res) => {
       res.status(200).json({ status: false, count });
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -369,7 +369,7 @@ exports.followers = async (req, res) => {
 
     res.status(200).json({ count, followers });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -393,7 +393,7 @@ exports.isLocated = async (req, res) => {
       }
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -403,6 +403,6 @@ exports.setLocality = async(req,res) => {
     await userData.findByIdAndUpdate(id, {location: place});
     res.status(200).json({status:true})
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 }

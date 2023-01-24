@@ -75,6 +75,10 @@ const ProfileUpdate = ({
           .then((res) => res.json())
           .then((data) => {
             setLoader(true);
+            if(data.err) {
+              setLoader(false)
+              return navigate('/PageNotFound')
+            }
             if (data.status === "ok") {
               setTimeout(() => {
                 setLoader(false);
@@ -96,7 +100,7 @@ const ProfileUpdate = ({
             }
           })
           .catch((err) => {
-            console.log(err);
+            navigate('/PageNotFound')
           });
       }
     }
@@ -118,6 +122,10 @@ const ProfileUpdate = ({
           .then((res) => res.json())
           .then((data) => {
             setLoader(true);
+            if(data.err) {
+              setLoader(false)
+              return navigate('/PageNotFound')
+            }
             if (data.status === "ok") {
               setTimeout(() => {
                 setLoader(false);
@@ -140,7 +148,7 @@ const ProfileUpdate = ({
             }
           })
           .catch((err) => {
-            console.log(err);
+            navigate('/PageNotFound')
           });
       }
     }
@@ -164,6 +172,10 @@ const ProfileUpdate = ({
           .then((res) => res.json())
           .then((data) => {
             setLoader(true);
+            if(data.err) {
+              setLoader(false)
+              return navigate('/PageNotFound')
+            }
             if (data.status === "notFound") {
               setErrMsg("Email is not found !!! Try with another or Signup");
             } else {
@@ -185,7 +197,7 @@ const ProfileUpdate = ({
             }
           })
           .catch((err) => {
-            console.log(err);
+            navigate('/PageNotFound')
           });
       }
     }
@@ -207,6 +219,10 @@ const ProfileUpdate = ({
           .then((res) => res.json())
           .then((data) => {
             setLoader(true);
+            if(data.err) {
+              setLoader(false)
+              return navigate('/PageNotFound')
+            }
             if (data.status === "ok") {
               setTimeout(() => {
                 setLoader(false);
@@ -229,7 +245,7 @@ const ProfileUpdate = ({
             }
           })
           .catch((err) => {
-            console.log(err);
+            navigate('/PageNotFound')
           });
       }
     }

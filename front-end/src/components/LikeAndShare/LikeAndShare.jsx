@@ -7,10 +7,12 @@ import { TbMessageReport } from "react-icons/tb";
 import ReportOnPost from "../ReportOnPost/ReportOnPost";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const LikeAndShare = ({ id, user, user1, postedUser }) => {
   const [like, setLike] = useState(false);
   const [report, setReport] = useState(false);
+  const navigate = useNavigate()
   const userId = user._id;
   useEffect(() => {
     if (user) {
@@ -23,6 +25,10 @@ const LikeAndShare = ({ id, user, user1, postedUser }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          if(data.err) {
+            
+            return navigate('/PageNotFound')
+          }
           const like = data.likes;
           if (like.length > 0) {
             setLike(true);
@@ -31,7 +37,7 @@ const LikeAndShare = ({ id, user, user1, postedUser }) => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     }
   }, [like]);

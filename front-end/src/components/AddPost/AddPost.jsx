@@ -62,7 +62,7 @@ const AddPost = ({ open, onClose, id }) => {
         setLocations(data.location);
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   },[])
 
@@ -199,6 +199,10 @@ const AddPost = ({ open, onClose, id }) => {
         .then((res) => res.json())
         .then((data) => {
           setLoader(true);
+          if(data.err) {
+            setLoader(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "emptyErr") {
             setLoader(false);
             setErrMsg("Empty values are not allowed");
@@ -221,7 +225,7 @@ const AddPost = ({ open, onClose, id }) => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     }
   }

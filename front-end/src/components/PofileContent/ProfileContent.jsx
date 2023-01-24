@@ -44,9 +44,6 @@ const ProfileContent = () => {
       .catch(err => {
         console.log(err)
       })
-      .catch(err => {
-        console.log(err)
-      });
   }, [fullName, email, phone, addPhoto, del, isPost, bio]);
 
   return (

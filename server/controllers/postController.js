@@ -33,7 +33,7 @@ exports.addPost = async (req, res) => {
     await post.save();
     res.status(200).send(post);
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -63,7 +63,7 @@ exports.likePost = async (req, res) => {
       res.status(200).json({ status: true });
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -94,7 +94,7 @@ exports.commentPost = async (req, res) => {
       res.status(200).send(comments);
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -171,7 +171,7 @@ exports.allPosts = async (req, res) => {
     
     res.status(200).json({ data });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -200,8 +200,8 @@ exports.singlePost = async (req, res) => {
       },
     ]);
     res.status(200).json({ post });
-  } catch (err) {
-    res.status(401)
+  } catch (err) {    
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -231,10 +231,10 @@ exports.userPosts = async (req, res) => {
 
       res.status(200).json({ data, userId });
     } else {
-      res.status(401)
+      res.status(401).json({status:'catchErr'})
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -277,7 +277,7 @@ exports.homePosts = async (req, res) => {
       
     res.status(200).json({ data });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -316,7 +316,7 @@ exports.postComments = async (req, res) => {
 
     res.status(200).json({ data });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -327,7 +327,7 @@ exports.getPost = async (req, res) => {
     const post = await postData.findById(id);
     res.status(200).json({ post });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -346,7 +346,7 @@ exports.editPost = async (req, res) => {
     });
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -358,7 +358,7 @@ exports.deletePost = async (req, res) => {
     await commentData.deleteMany({ postId: id });
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -378,7 +378,7 @@ exports.getLikeDetails = async (req, res) => {
       res.status(200).json({ likes });
     }
   } catch (err) {
-    res.status(401);
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -403,7 +403,7 @@ exports.reportPost = async (req, res) => {
     await data.save();
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -412,7 +412,7 @@ exports.locations = async(req,res) => {
     const location = await locationData.find({}).sort({name:1})
     res.status(200).json({location})
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 }
 
@@ -434,7 +434,7 @@ exports.categories = async(req,res) => {
     
     res.status(200).json({data})
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 }
 
@@ -473,7 +473,7 @@ exports.singleCategory = async(req, res) => {
 
     res.status(200).json({ data });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 }
 
@@ -512,6 +512,6 @@ exports.filteredPosts = async(req, res) => {
 
     res.status(200).json({ data });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 }

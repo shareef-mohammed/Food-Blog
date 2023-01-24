@@ -17,6 +17,7 @@ import SingleCatePosts from "./pages/SingleCatePosts/SingleCatePosts";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LocationManagement from "./pages/LocationManagement/LocationManagement";
+import PageNotFound from "./pages/404/PageNotFound";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/User/Login" element={<Login />} />
           <Route path="/User/Register" element={<Register />} />
           <Route path="/User/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/PageNotFound" element={<PageNotFound /> } />
         </Route>
       </Routes>
       <ToastContainer />

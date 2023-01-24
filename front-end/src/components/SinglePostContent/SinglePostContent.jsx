@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BsFillStarFill } from "react-icons/bs";
 import { format } from "timeago.js";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentToken, selectCurrentUser } from "../../features/auth/authSlice";
 import LikeAndShare from "../LikeAndShare/LikeAndShare";
@@ -11,10 +11,10 @@ import Comments from "../Comments/Comments";
 const SinglePostContent = () => {
   const params = useParams();
   const [post, setPost] = useState([]);
-
   const [user, setUser] = useState("");
   const token = useSelector(selectCurrentUser);
   const valid = useSelector(selectCurrentToken);
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BASEURL}/user/details/${token}`, {
@@ -42,10 +42,14 @@ const SinglePostContent = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err){
+          return navigate('/PageNotFound')
+        }
         setPost(data.post);
+
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   }, []);
 

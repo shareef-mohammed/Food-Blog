@@ -3,12 +3,14 @@ import { useState } from "react";
 import Loader from "../Loader/Loader";
 import OtpVerify from "../OtpVerify/OtpVerify";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassContent = () => {
   const [otp, setOtp] = useState(false);
   const [email, setEmail] = useState("");
   const [loader, setLoader] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const navigate = useNavigate()
   function submitEmail() {
     const regx =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -28,6 +30,10 @@ const ForgotPassContent = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+          if(data.err) {
+            setLoader(false)
+            // return navigate('/PageNotFound')
+          }
           if (data.status === "notFound") {
             setErrMsg("Email is not found !!! Try with another or Signup");
           } else {
@@ -45,7 +51,7 @@ const ForgotPassContent = () => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          // navigate('/PageNotFound')
         });
     }
   }

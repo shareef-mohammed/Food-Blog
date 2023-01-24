@@ -48,6 +48,10 @@ const ResetPassword = ({ open, email, onClose }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          if(data.err) {
+            
+            return navigate('/PageNotFound')
+          }
           if (data.status === "ok") {
             onClose();
             navigate("/");
@@ -67,7 +71,7 @@ const ResetPassword = ({ open, email, onClose }) => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     }
   }

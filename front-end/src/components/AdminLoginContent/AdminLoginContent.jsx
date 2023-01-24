@@ -27,6 +27,10 @@ const AdminLoginContent = () => {
         .then((res) => res.json())
         .then((data) => {
           setLoad(true);
+          if(data.err) {
+            setLoad(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "emailErr") {
             setLoad(false);
             setErrMsg("Invalid Email Id");
@@ -53,7 +57,7 @@ const AdminLoginContent = () => {
         })
         .catch((err) => {
           setLoad(false);
-          console.log(err);
+          navigate('/PageNotFound')
         });
     }
   }

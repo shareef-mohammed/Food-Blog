@@ -70,6 +70,8 @@ const AdminConfirm = ({
           if (data.status == "err") {
             return navigate("/Admin/Login");
           }
+        }).catch(err => {
+          navigate('/PageNotFound')
         });
     } else {
       return navigate("/Admin/Login");
@@ -85,6 +87,10 @@ const AdminConfirm = ({
         })
           .then((res) => res.json())
           .then((data) => {
+            if(data.err) {
+              setLoader(false)
+              return navigate('/PageNotFound')
+            }
             if (data.status === "ok") {
               window.location.reload();
               toast.error("User has blocked", {
@@ -100,7 +106,7 @@ const AdminConfirm = ({
             }
           })
           .catch((err) => {
-            console.log(err);
+            navigate('/PageNotFound')
           });
       } else {
         fetch(`${process.env.REACT_APP_BASEURL}/admin/unblockUser/${id}`, {
@@ -112,6 +118,10 @@ const AdminConfirm = ({
         })
           .then((res) => res.json())
           .then((data) => {
+            if(data.err) {
+              setLoader(false)
+              return navigate('/PageNotFound')
+            }
             if (data.status === "ok") {
               let i = 0;
               window.location.reload();
@@ -128,7 +138,7 @@ const AdminConfirm = ({
             }
           })
           .catch((err) => {
-            console.log(err);
+            navigate('/PageNotFound')
           });
       }
     } else if (banner) {
@@ -141,6 +151,10 @@ const AdminConfirm = ({
       })
         .then((res) => res.json())
         .then((data) => {
+          if(data.err) {
+            setLoader(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "ok") {
             window.location.reload();
             toast.error("Banner has removed", {
@@ -156,7 +170,7 @@ const AdminConfirm = ({
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     } else if (report) {
       fetch(`${process.env.REACT_APP_BASEURL}/admin/removeReport/${id}`, {
@@ -168,6 +182,10 @@ const AdminConfirm = ({
       })
         .then((res) => res.json())
         .then((data) => {
+          if(data.err) {
+            setLoader(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "ok") {
             window.location.reload();
             toast.success("Report has removed", {
@@ -183,7 +201,7 @@ const AdminConfirm = ({
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     } else if(location) {
       fetch(`${process.env.REACT_APP_BASEURL}/admin/removeLocation/${id}`, {
@@ -195,6 +213,10 @@ const AdminConfirm = ({
       })
         .then((res) => res.json())
         .then((data) => {
+          if(data.err) {
+            setLoader(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "ok") {
             window.location.reload();
             toast.success("Report has removed", {
@@ -210,7 +232,7 @@ const AdminConfirm = ({
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     } else {
       setLoader(true);

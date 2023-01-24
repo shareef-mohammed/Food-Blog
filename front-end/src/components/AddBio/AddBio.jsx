@@ -5,6 +5,7 @@ import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Register_style = {
   position: "fixed",
@@ -31,6 +32,7 @@ const AddBio = ({ open, onClose, id }) => {
   const [bio, setBio] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [loader, setLoader] = useState(false);
+  const navigate = useNavigate()
 
   const user = useSelector(selectCurrentToken);
   const updateBio = (e) => {
@@ -55,6 +57,10 @@ const AddBio = ({ open, onClose, id }) => {
       .then((res) => res.json())
       .then((data) => {
         setLoader(true);
+        if(data.err) {
+          setLoader(false)
+          return navigate('/PageNotFound')
+        }
         if (data.status === "ok") {
           setTimeout(() => {
             setLoader(false);
@@ -76,7 +82,7 @@ const AddBio = ({ open, onClose, id }) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   };
 

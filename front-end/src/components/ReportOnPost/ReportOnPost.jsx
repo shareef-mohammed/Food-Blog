@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Register_style = {
   position: "fixed",
@@ -28,6 +29,7 @@ const ReportOnPost = ({ user, userId, id, open, onClose, postedUser }) => {
   const [report, setReport] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [load, setLoad] = useState(false);
+  const navigate = useNavigate()
 
   const reportPost = () => {
     const reportedUser = user.userName;
@@ -53,6 +55,10 @@ const ReportOnPost = ({ user, userId, id, open, onClose, postedUser }) => {
       .then((res) => res.json())
       .then((data) => {
         setLoad(true);
+        if(data.err) {
+          setLoad(false)
+          return navigate('/PageNotFound')
+        }
         if (data.status === "wrongErr") {
           setLoad(false);
           setErrMsg("Something went wrong");
@@ -78,7 +84,7 @@ const ReportOnPost = ({ user, userId, id, open, onClose, postedUser }) => {
       })
       .catch((err) => {
         setLoad(false);
-        console.log(err);
+        navigate('/PageNotFound')
       });
   };
   if (!open) return null;

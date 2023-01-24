@@ -45,7 +45,7 @@ exports.adminLogin = async (req, res) => {
       res.status(200).json({ status: "emailErr" });
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({status:'catchErr'})
   }
 };
 
@@ -68,7 +68,7 @@ exports.userDetails = async (req, res) => {
     const data = search(users).splice(skip, DEFAULT_LIMIT);
     res.status(200).json({ data });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -80,7 +80,7 @@ exports.blockUser = async (req, res) => {
     await userData.findByIdAndUpdate({ _id: userId }, { isBlocked: true });
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -91,7 +91,7 @@ exports.unblockUser = async (req, res) => {
     await userData.findByIdAndUpdate({ _id: userId }, { isBlocked: false });
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -106,7 +106,7 @@ exports.banners = async (req, res) => {
       .limit(DEFAULT_LIMIT);
     res.status(200).json({ data });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -128,7 +128,7 @@ exports.addBanner = async (req, res) => {
     await newBanner.save();
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -138,7 +138,7 @@ exports.deleteBanner = async (req, res) => {
     await bannerData.findByIdAndDelete(id);
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -148,7 +148,7 @@ exports.getBanners = async (req, res) => {
 
     res.status(200).json({ banners });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -163,7 +163,7 @@ exports.getReports = async (req, res) => {
       .limit(DEFAULT_LIMIT);
     res.status(200).json({ data });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -216,7 +216,7 @@ exports.postChartData = async (req, res) => {
 
     res.status(200).json({ data, users });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -228,7 +228,7 @@ exports.userCounts = async (req, res) => {
     const totCount = await userData.find({}).count();
     res.status(200).json({ count, totCount });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -238,7 +238,7 @@ exports.removeReport = async (req, res) => {
     await reportData.findByIdAndDelete(id);
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -257,7 +257,7 @@ exports.adminDetails = async (req, res) => {
       res.status(200).json({ status: "err" });
     }
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -273,7 +273,7 @@ exports.locations = async (req, res) => {
 
     res.status(200).json({ data });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -290,7 +290,7 @@ exports.addLocation = async (req, res) => {
     await location.save();
     res.status(200).json({ status: true });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };
 
@@ -300,6 +300,6 @@ exports.removeLocation = async (req, res) => {
     await locationData.findByIdAndDelete(id);
     res.status(200).json({ status: "ok" });
   } catch (err) {
-    res.status(401)
+    res.status(401).json({err:'catchErr'})
   }
 };

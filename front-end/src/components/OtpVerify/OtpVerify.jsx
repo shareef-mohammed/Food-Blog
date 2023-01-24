@@ -84,6 +84,10 @@ const OtpVerify = ({
       })
         .then((res) => res.json())
         .then((data) => {
+          if(data.err) {
+            setLoader(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "invalid") {
             setLoader(false);
             setErrMsg("Invalid OTP !!!");
@@ -117,6 +121,10 @@ const OtpVerify = ({
             })
               .then((res) => res.json())
               .then((data) => {
+                if(data.err) {
+                  setLoader(false)
+                  return navigate('/PageNotFound')
+          }
                 if (data.status === "ok") {
                   setLoader(false);
                   onClose();
@@ -135,7 +143,7 @@ const OtpVerify = ({
                 }
               })
               .catch((err) => {
-                console.log(err);
+                navigate('/PageNotFound')
               });
           } else {
             setLoader(false);
@@ -156,7 +164,7 @@ const OtpVerify = ({
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     }
   }
@@ -174,6 +182,10 @@ const OtpVerify = ({
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err) {
+          setLoader(false)
+          return navigate('/PageNotFound')
+        }
         if (data.status === "ok") {
           setLoader(false);
           setMinutes(1);
@@ -194,7 +206,7 @@ const OtpVerify = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   }
 

@@ -5,6 +5,7 @@ import { BsArrowRightCircleFill } from "react-icons/bs";
 import ContentLoader from "../Loader/ContentLoader";
 import { selectCurrentToken } from "../../features/auth/authSlice";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Comments = ({ user, pos, id }) => {
   const [comments, setComments] = useState([]);
@@ -13,7 +14,7 @@ const Comments = ({ user, pos, id }) => {
   const [loading, setLoading] = useState(false);
   const [skip, setSkip] = useState(0);
   const token = useSelector(selectCurrentToken)
-
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchPost();
@@ -50,7 +51,7 @@ const Comments = ({ user, pos, id }) => {
 
       setComments([...comments, ...data]);
     } catch (error) {
-      console.log(error.message);
+      navigate('/PageNotFound')
     }
   };
 

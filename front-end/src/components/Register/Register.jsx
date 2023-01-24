@@ -73,6 +73,10 @@ const Register = ({ open, onClose }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          if(data.err) {
+            setLoader(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "emailExist") {
             setLoader(false);
             setErrMsg("Email is already exist !!! Try with another");
@@ -101,7 +105,7 @@ const Register = ({ open, onClose }) => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     }
   }

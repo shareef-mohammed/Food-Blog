@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { AiOutlineClose } from "react-icons/ai";
+import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 const Register_style = {
@@ -27,6 +28,7 @@ const NewLocation = ({open, onClose}) => {
     const [name, setName] = useState('')
     const [errMsg, setErrMsg] = useState('')
     const token = localStorage.getItem('adminToken')
+    const navigate = useNavigate()
 
     const addLocation = () => {
         fetch(`${process.env.REACT_APP_BASEURL}/admin/addLocation`, {
@@ -41,6 +43,10 @@ const NewLocation = ({open, onClose}) => {
         })
         .then(res => res.json())
         .then(data => {
+          if(data.err) {
+            
+            return navigate('/PageNotFound')
+          }
            if(data.status === 'existErr'){
             return setErrMsg('Location already exist.')
            } else {
@@ -58,7 +64,7 @@ const NewLocation = ({open, onClose}) => {
            }
         })
         .catch(err => {
-            console.log(err)
+            navigate('/PageNotFound')
         })
     }
     if(!open) return null

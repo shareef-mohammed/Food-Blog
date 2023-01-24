@@ -8,12 +8,14 @@ import { IoFastFoodOutline } from "react-icons/io5";
 import { IoIosRestaurant } from "react-icons/io";
 import { GoLocation } from "react-icons/go";
 import { BiBarcodeReader } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 const Carousel = () => {
   const [slide, setSlide] = useState(0);
 
   const [banners, setBanners] = useState([]);
   const length = banners.length;
+  const navigate = useNavigate()
 
   const prevSlide = () => {
     setSlide(slide === length - 1 ? 0 : slide + 1);
@@ -46,10 +48,14 @@ const Carousel = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err) {
+          
+          return navigate('/PageNotFound')
+        }
         setBanners(data.banners);
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   }, []);
 
@@ -93,10 +99,10 @@ const Carousel = () => {
                       {banner.offer} OFF
                     </p>
                     {banner.code && (
-                      <p className="sm:text-[0.8rem] md:text-[2rem] text-white font-semibold flex ">
+                      <p className="sm:text-[0.8rem] md:text-[1.8rem] text-white font-semibold flex ">
                         <BiBarcodeReader className="md:mt-2 mx-2 text-[#7f1d1d]" />
                         {banner.code}
-                        <p className="border text-[#7f1d1d] text-sm h-5 mt-4 ml-2 rounded-xl px-1">
+                        <p className="border text-[#7f1d1d] text-sm h-5 mt-4 ml-2 rounded-xl ">
                           Use this code
                         </p>
                       </p>

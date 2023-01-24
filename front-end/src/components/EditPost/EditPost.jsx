@@ -8,6 +8,7 @@ import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
 import { selectCurrentToken } from "../../features/auth/authSlice";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Register_style = {
   position: "fixed",
@@ -48,6 +49,7 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
   const [errMsg, setErrMsg] = useState("");
   const [locations,setLocations] = useState([])
 
+  const navigate = useNavigate()
   const token = useSelector(selectCurrentToken);
 
   useEffect(() => {
@@ -59,17 +61,26 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err) {
+          return navigate('/PageNotFound')
+        }
         setFoodName(data.post.foodName);
         setDesc(data.post.desc);
         setRating(data.post.rating);
         setResName(data.post.resName);
         setContact(data.post.contact);
         setAddress(data.post.address);
-        setUrl1(data.post.images.url);
-        setUrl2(data.post.resImage.url);
+        if(data.post.images) {
+          setUrl1(data.post.images.url);
+        }
+        if(data.post.resImage) {
+
+          setUrl2(data.post.resImage.url);
+        }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err)
+        navigate('/PageNotFound')
       });
 
       fetch(`${process.env.REACT_APP_BASEURL}/posts/Locations`, {
@@ -79,10 +90,14 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          if(data.err) {
+            
+            return navigate('/PageNotFound')
+          }
           setLocations(data.location);
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
   }, []);
 
@@ -218,6 +233,10 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
         .then((res) => res.json())
         .then((data) => {
           setLoader(true);
+          if(data.err) {
+            setLoader(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "ok") {
             setTimeout(() => {
               setLoader(false);
@@ -239,7 +258,7 @@ const EditPost = ({ open, onClose, id, userId, load }) => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     }
   }

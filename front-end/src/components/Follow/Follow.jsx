@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { selectCurrentToken } from "../../features/auth/authSlice";
 import Loader from "../Loader/Loader";
 import UserDetails from "./UserDetails";
@@ -12,6 +13,7 @@ const Follow = ({ user, pos }) => {
   const [details, setDetails] = useState(false);
   const [loader, setLoader] = useState(false);
   const token = useSelector(selectCurrentToken);
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetch(
@@ -26,6 +28,10 @@ const Follow = ({ user, pos }) => {
       .then((res) => res.json())
       .then((data) => {
         setLoader(true);
+        if(data.err) {
+          setLoader(false)
+          return navigate('/PageNotFound')
+        }
         if (data.status) {
           // setTimeout(() => {
           setFollow(true);
@@ -41,7 +47,7 @@ const Follow = ({ user, pos }) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   }, [count, follow]);
   const handleHide = () => {
@@ -62,6 +68,10 @@ const Follow = ({ user, pos }) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err) {
+          setLoader(false)
+          return navigate('/PageNotFound')
+        }
         if (follow) {
           setFollow(false);
         } else {
@@ -69,7 +79,7 @@ const Follow = ({ user, pos }) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   };
 

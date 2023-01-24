@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CartesianGrid,
   LineChart,
@@ -14,6 +15,7 @@ import {
 
 const LineChar = () => {
   const [data, setData] = useState([]);
+  const navigate = useNavigate()
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BASEURL}/admin/postChartData`, {
       headers: {
@@ -22,10 +24,13 @@ const LineChar = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err) {          
+          return navigate('/PageNotFound')
+        }
         setData(data.data);
       })
       .catch(err => {
-        console.log(err)
+        navigate('/PageNotFound')
       });
   }, []);
 

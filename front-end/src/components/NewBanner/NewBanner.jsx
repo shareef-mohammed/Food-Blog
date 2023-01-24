@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Register_style = {
   position: "fixed",
@@ -31,7 +32,24 @@ const NewBanner = ({ open, onClose }) => {
   const [address, setAddress] = useState("");
   const [code, setCode] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [locations, setLocations] = useState([])
   const token = localStorage.getItem('adminToken')
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BASEURL}/posts/Locations`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setLocations(data.location);
+      })
+      .catch((err) => {
+        navigate('/PageNotFound')
+      });
+  },[])
 
   function addBanner() {
     if (!foodName || !resName || !offer || !image) {
@@ -71,6 +89,10 @@ const NewBanner = ({ open, onClose }) => {
         })
           .then((res) => res.json())
           .then((data) => {
+            if(data.err) {
+              
+              return navigate('/PageNotFound')
+            }
             onClose();
             toast.success("Banner added successfully", {
               position: "top-center",
@@ -84,7 +106,7 @@ const NewBanner = ({ open, onClose }) => {
             });
           })
           .catch((err) => {
-            console.log(err);
+            navigate('/PageNotFound')
           });
       })
     );
@@ -128,12 +150,20 @@ const NewBanner = ({ open, onClose }) => {
             <br />
             <label className="py-1">
               Address <br />
-              <input
+              <select
                 className="w-[100%] border-2"
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-              />
+              > 
+              {
+              locations && locations.map((location, i) => {
+                return(
+                  <option key={i}>{location.name}</option>
+                )
+              })
+            }
+              </select>
             </label>
             <br />
             <label className="py-1">

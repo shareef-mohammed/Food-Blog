@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 import FilterButtons from './FilterButtons';
 
 const Filter = ({locationFilter, onFilter, offFilter}) => {
     const [option, setOption] = useState([])
+    const navigate = useNavigate()
     
     useEffect(() => {
         fetch(`${process.env.REACT_APP_BASEURL}/posts/Locations`, {
@@ -14,11 +16,15 @@ const Filter = ({locationFilter, onFilter, offFilter}) => {
           })
           .then(res => res.json())
           .then(data => {
+            if(data.err) {
+              
+              return navigate('/PageNotFound')
+            }
             setOption(data.location)
             
           })
           .catch(err => {
-            console.log(err)
+            navigate('/PageNotFound')
           })
 
     },[])
@@ -40,7 +46,7 @@ const Filter = ({locationFilter, onFilter, offFilter}) => {
         onClick={slideLeft}
         size={20}
       />
-        <div id='slider1' className='flex w-[80%] overflow-scroll scrollbar-hide scroll-smooth'  >
+        <div id='slider1' className='flex w-[95%] overflow-scroll scrollbar-hide scroll-smooth mx-auto'  >
             {option.map((opt, i) => {
                 return(
                     <FilterButtons key={i} opt={opt} locationFilter={locationFilter} onFilter={onFilter} offFilter={offFilter} />

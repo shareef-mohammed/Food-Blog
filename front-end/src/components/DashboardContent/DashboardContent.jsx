@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BarChar from "./BarChart";
 import LineChar from "./LineChart";
 
 const DashboardContent = () => {
   const [count, setCount] = useState("");
   const [totCount, setTotCount] = useState("");
+  const navigate = useNavigate()
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BASEURL}/admin/userCounts`, {
       headers: {
@@ -13,11 +15,15 @@ const DashboardContent = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err) {
+          
+          return navigate('/PageNotFound')
+        }
         setCount(data.count);
         setTotCount(data.totCount);
       })
       .catch(err => {
-        console.log(err)
+        navigate('/PageNotFound')
       });
   });
   return (

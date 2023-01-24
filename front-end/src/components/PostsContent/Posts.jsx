@@ -28,7 +28,7 @@ const Posts = ({ user, data }) => {
             className="max-w-[100%] mx-auto px-12 py-6  relative flex  items-center "
             key={i}
           >
-            <div className="md:w-[60%] border-b-2">
+            <div className="sm:w-[50%] md:w-[80%] border-b-2">
               <div className="flex">
                 <img
                   className="h-6 w-6 mt-1 rounded-full"
@@ -67,7 +67,7 @@ const Posts = ({ user, data }) => {
                 {user && <LikeAndShare postedUser={post.details[0].userName} id={post._id} user={user} user1={post.userId}/>}
               </div>
             </div>
-            <div className="sm:w-[40%] md:w-[30%] lg:w-[20%] ml-3">
+            <div className="sm:w-[50%] md:w-[30%] lg:w-[20%] ml-3">
               <img
                 className="w-48 sm:h-28 md:h-32 px-auto rounded-md"
                 src={

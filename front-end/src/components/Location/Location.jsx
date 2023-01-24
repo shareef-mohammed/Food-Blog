@@ -5,6 +5,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectCurrentToken, selectCurrentUser } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Register_style = {
   position: "fixed",
@@ -31,6 +32,7 @@ const Location = ({ opened, onClose, user, button }) => {
   const [places, setPlaces] = useState([]);
   const [load, setLoad] = useState(false);
   const token = useSelector(selectCurrentToken)
+  const navigate = useNavigate()
   const id = user._id;
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BASEURL}/posts/Locations`, {
@@ -40,10 +42,14 @@ const Location = ({ opened, onClose, user, button }) => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err) {
+          
+          return navigate('/PageNotFound')
+        }
         setPlaces(data.location);
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   }, [user]);
 
@@ -62,6 +68,10 @@ const Location = ({ opened, onClose, user, button }) => {
       .then((res) => res.json())
       .then((data) => {
         setLoad(true);
+        if(data.err) {
+          setLoad(false)
+          return navigate('/PageNotFound')
+        }
         if (data.status === true) {
           setTimeout(() => {
             onClose();
@@ -78,9 +88,12 @@ const Location = ({ opened, onClose, user, button }) => {
             });
           }, 500);
         }
+      })
+      .catch(err => {
+        navigate('/PageNotFound')
       });
   };
-  console.log(places)
+  
 
   if (load) return <Loader />;
   if (!opened) return null;

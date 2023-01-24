@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import ContentLoader from '../Loader/ContentLoader';
 import DeleteButton from './DeleteButton';
 import NewLocation from './NewLocation';
@@ -10,6 +11,7 @@ const LocationManContent = () => {
   const [loading, setLoading] = useState(false);
   const [locations, setLocations] = useState([])
   const [location, setLocation] = useState(false)
+  const navigate = useNavigate()
 
   let i = 0;
   useEffect(() => {
@@ -47,7 +49,7 @@ const LocationManContent = () => {
         setLocations([...locations, ...data]);
      
     } catch (error) {
-      console.log(error.message);
+      navigate('/PageNotFound')
     }
   };
 

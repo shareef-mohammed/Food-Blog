@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ContentLoader from "../Loader/ContentLoader";
 import ReportTable from "./ReportTable";
 
@@ -8,6 +9,7 @@ const ReportManContent = () => {
   const [skip, setSkip] = useState(0);
   const [isEnd, setIsEnd] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchPost();
@@ -28,7 +30,7 @@ const ReportManContent = () => {
 
       setReports([...reports, ...data]);
     } catch (error) {
-      console.log(error.message);
+      navigate('/PageNotFound')
     }
   };
 

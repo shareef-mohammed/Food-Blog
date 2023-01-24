@@ -11,9 +11,11 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 const BarChar = () => {
   const [data, setData] = useState([]);
+  const navigate = useNavigate()
   // const chartRef = useRef(null);
 
   // const handleDownload = () => {
@@ -35,10 +37,15 @@ const BarChar = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err) {
+          
+          return navigate('/PageNotFound')
+        }
         setData(data.users);
+
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   }, []);
 

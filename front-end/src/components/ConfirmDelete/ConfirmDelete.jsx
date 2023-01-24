@@ -4,6 +4,7 @@ import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
 import { selectCurrentToken } from "../../features/auth/authSlice";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Register_style = {
   position: "fixed",
@@ -28,6 +29,7 @@ const overlay_style = {
 const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
   const [loader, setLoader] = useState(false);
   const token = useSelector(selectCurrentToken);
+  const navigate = useNavigate()
   const deletePost = () => {
     if (!photo) {
       fetch(`${process.env.REACT_APP_BASEURL}/user/deletePost/${id}`, {
@@ -40,6 +42,10 @@ const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
         .then((res) => res.json())
         .then((data) => {
           setLoader(true);
+          if(data.err) {
+            setLoader(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "ok") {
             setTimeout(() => {
               setLoader(false);
@@ -61,7 +67,7 @@ const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     } else {
       fetch(`${process.env.REACT_APP_BASEURL}/user/deletePhoto/${id}`, {
@@ -74,6 +80,10 @@ const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
         .then((res) => res.json())
         .then((data) => {
           setLoader(true);
+          if(data.err) {
+            setLoader(false)
+            return navigate('/PageNotFound')
+          }
           if (data.status === "ok") {
             setTimeout(() => {
               setLoader(false);
@@ -95,7 +105,7 @@ const ConfirmDelete = ({ open, onClose, id, photo, load }) => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          navigate('/PageNotFound')
         });
     }
   };

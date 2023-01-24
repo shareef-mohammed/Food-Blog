@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { selectCurrentToken, selectCurrentUser } from "../../features/auth/authSlice";
 import FollowList from "./FollowList";
 
@@ -11,6 +12,7 @@ const Followers = () => {
   const [open, setOpen] = useState(false);
   const user = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken)
+  const navigate = useNavigate()
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BASEURL}/user/followers/${user}`, {
       headers: {
@@ -20,11 +22,15 @@ const Followers = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.err) {
+         
+          return navigate('/PageNotFound')
+        }
         setCount(data.count);
         setFollowers(data.followers);
       })
       .catch(err => {
-        console.log(err)
+        navigate('/PageNotFound')
       });
   }, []);
   return (
