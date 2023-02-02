@@ -12,15 +12,15 @@ const SinglePostContent = () => {
   const params = useParams();
   const [post, setPost] = useState([]);
   const [user, setUser] = useState("");
-  const token = useSelector(selectCurrentUser);
-  const valid = useSelector(selectCurrentToken);
+  
+  const token = useSelector(selectCurrentToken);
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASEURL}/user/details/${token}`, {
+    fetch(`${process.env.REACT_APP_BASEURL}/user/details`, {
       headers: {
         "Content-Type": "application/json",
-        "X-Custom-Header": `${valid}`,
+        "X-Custom-Header": `${token}`,
       },
     })
       .then((res) => res.json())
@@ -37,7 +37,7 @@ const SinglePostContent = () => {
     fetch(`${process.env.REACT_APP_BASEURL}/user/singlePost/${id}`, {
       headers: {
         "Content-Type": "application/json",
-        "X-Custom-Header": `${valid}`,
+        "X-Custom-Header": `${token}`,
       },
     })
       .then((res) => res.json())

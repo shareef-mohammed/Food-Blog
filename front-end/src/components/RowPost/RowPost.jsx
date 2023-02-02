@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
+import { selectCurrentPost } from "../../features/post/PostSlice";
 import EditAndDelete from "../EditAndDelete/EditAndDelete";
 import ContentLoader from "../Loader/ContentLoader";
 
@@ -13,10 +15,11 @@ const RowPost = ({ user, home }) => {
   const [isEnd, setIsEnd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
+  const post = useSelector(selectCurrentPost)
 
   useEffect(() => {
     fetchPost();
-  }, [skip, reload]);
+  }, [skip, reload, post]);
 
   const fetchPost = async () => {
     try {

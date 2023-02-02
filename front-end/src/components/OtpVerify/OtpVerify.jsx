@@ -65,13 +65,13 @@ const OtpVerify = ({
     };
   }, [seconds, minutes]);
 
-  function verifyOTP() {
+  async function verifyOTP() {
     if (!otp) {
       setErrMsg("Empty values are not allowed");
     } else {
-      console.log(input)
+      
       setLoader(true);
-      fetch(`${process.env.REACT_APP_BASEURL}/user/otpVerify`, {
+      await fetch(`${process.env.REACT_APP_BASEURL}/user/otpVerify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

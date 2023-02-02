@@ -87,7 +87,7 @@ const Comments = ({ user, pos, id }) => {
         setComment("");
       })
       .catch((err) => {
-        console.log(err);
+        navigate('/PageNotFound')
       });
   };
   return (

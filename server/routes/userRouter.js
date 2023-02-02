@@ -34,7 +34,7 @@ router.post("/user/resendOtp", resendOtp);
 router.put("/user/followUser/:id", followUser);
 router.put("/user/addProfilePic", addProfilePic);
 router.put("/user/updateProfile/:id", auth.validateUserToken, updateProfile);
-router.get("/user/details/:id", auth.validateUserToken, userDetails);
+router.get("/user/details", auth.validateUserToken, userDetails);
 router.post("/user/forgotPassword", forgotPassword);
 router.post("/user/resetPassword", resetPassword);
 router.post("/user/resetEmail", auth.validateUserToken, resetEmail);

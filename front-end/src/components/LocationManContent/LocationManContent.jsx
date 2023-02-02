@@ -67,7 +67,7 @@ const LocationManContent = () => {
       }, 1500);
     }
   };
-  console.log(locations)
+  
   if (locations.length === 0)
     return (
       <div className="text-left p-5">

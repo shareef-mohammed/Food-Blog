@@ -26,11 +26,15 @@ app.use(express.urlencoded({ extended: true }));
 const userRouter = require("./routes/userRouter");
 const adminRouter = require("./routes/adminRouter");
 const postRouter = require("./routes/postRouter");
+const chatRouter = require('./routes/chatRouter')
+const messageRouter = require('./routes/messageRouter')
 
 app.use("/", userRouter);
 app.use("/auth", require("./routes/authRouter"));
 app.use("/admin", adminRouter);
 app.use("/", postRouter);
+app.use("/chat", chatRouter)
+app.use('/message', messageRouter)
 
 dbConfig();
 app.listen(process.env.PORT, () => {

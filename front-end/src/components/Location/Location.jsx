@@ -4,8 +4,10 @@ import Loader from "../Loader/Loader";
 import { AiOutlineClose } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import {setLocationCredentials} from "../../features/location/LocationSlice"
 import { selectCurrentToken, selectCurrentUser } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Register_style = {
   position: "fixed",
@@ -28,13 +30,30 @@ const overlay_style = {
   zIndex: 1000,
 };
 
-const Location = ({ opened, onClose, user, button }) => {
+const Location = ({ opened, onClose, button }) => {
   const [places, setPlaces] = useState([]);
   const [load, setLoad] = useState(false);
+  const [user, setUser] = useState('')
   const token = useSelector(selectCurrentToken)
   const navigate = useNavigate()
-  const id = user._id;
+  const dispatch = useDispatch()
+  
+  
   useEffect(() => {
+    fetch(`${process.env.REACT_APP_BASEURL}/user/details`, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Custom-Header": `${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUser(data.details);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  
     fetch(`${process.env.REACT_APP_BASEURL}/posts/Locations`, {
       headers: {
         "Content-Type": "application/json",
@@ -51,9 +70,10 @@ const Location = ({ opened, onClose, user, button }) => {
       .catch((err) => {
         navigate('/PageNotFound')
       });
-  }, [user]);
+  }, []);
 
   const setLocality = (place) => {
+    const id = user._id;
     fetch(`${process.env.REACT_APP_BASEURL}/user/setLocality`, {
       method: "PUT",
       headers: {
@@ -74,6 +94,7 @@ const Location = ({ opened, onClose, user, button }) => {
         }
         if (data.status === true) {
           setTimeout(() => {
+            dispatch(setLocationCredentials(place));
             onClose();
             setLoad(false);
             toast.success("Location added successfully", {

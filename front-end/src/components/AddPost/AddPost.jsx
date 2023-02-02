@@ -6,9 +6,10 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 import { AiOutlineCloseCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentToken } from "../../features/auth/authSlice";
 import { useEffect } from "react";
+import { setPostCredentials } from "../../features/post/PostSlice";
 
 const Register_style = {
   position: "fixed",
@@ -47,6 +48,7 @@ const AddPost = ({ open, onClose, id }) => {
   const [errMsg, setErrMsg] = useState("");
   const [loader, setLoader] = useState(false);
   const [locations, setLocations] = useState([]);
+  const dispatch = useDispatch()
   const user = useSelector(selectCurrentToken);
 
   let url1, url2;
@@ -208,9 +210,10 @@ const AddPost = ({ open, onClose, id }) => {
             setErrMsg("Empty values are not allowed");
           } else {
             setTimeout(() => {
+              dispatch(setPostCredentials(foodName))
               setLoader(false);
               onClose();
-              window.location.reload();
+              window.location.reload()
               toast.success("Post added successfully", {
                 position: "top-center",
                 autoClose: 5000,

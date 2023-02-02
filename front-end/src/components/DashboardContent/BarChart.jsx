@@ -16,19 +16,7 @@ import { useNavigate } from "react-router-dom";
 const BarChar = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate()
-  // const chartRef = useRef(null);
-
-  // const handleDownload = () => {
-  //   const chartNode = chartRef.current;
-  //   console.log(chartNode)
-  //   const canvas = chartNode.chartInstance.canvas;
-  //   const imgData = canvas.toDataURL('image/png');
-
-  //   const pdf = new jsPDF('p', 'mm', 'a4');
-  //   pdf.addImage(imgData, 'PNG', 10, 10, 180, 100);
-  //   pdf.save('chart.pdf');
-  // };
-
+ 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BASEURL}/admin/postChartData`, {
       headers: {

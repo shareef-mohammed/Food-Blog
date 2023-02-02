@@ -18,6 +18,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LocationManagement from "./pages/LocationManagement/LocationManagement";
 import PageNotFound from "./pages/404/PageNotFound";
+import Chat from "./pages/Chat/Chat";
 
 function App() {
   return (
@@ -27,13 +28,14 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route path="/Profile" element={<Profile />} />
             <Route path="/SinglePost/:id" element={<SinglePost />} />
+            <Route path="/Chat" element={<Chat /> } />
           </Route>
           <Route path="/" element={<Home />} />
           <Route path="/Posts" element={<Posts />} />
           <Route
             path="/Posts/SingleCategory/:id"
             element={<SingleCatePosts />}
-          />
+          /> 
           <Route path="/Admin/Login" element={<AdminLogin />} />
           <Route path="/Admin/Dashboard" element={<AdminDashboard />} />
           <Route path="/Admin/UserManagement" element={<AdminUserMan />} />
@@ -47,6 +49,7 @@ function App() {
           <Route path="/User/Register" element={<Register />} />
           <Route path="/User/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/PageNotFound" element={<PageNotFound /> } />
+          <Route path="*" element={<PageNotFound /> } />
         </Route>
       </Routes>
       <ToastContainer />

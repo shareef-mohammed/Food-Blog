@@ -206,25 +206,11 @@ exports.updateProfile = async (req, res) => {
 exports.userDetails = async (req, res) => {
   try {
     
-    if (req.params.id) {
-      const user = req.params.id;
-      const username = await userData.findOne({ userName: user });
-      const userEmail = await userData.findOne({ email: user });
-
-      let id;
-      if (username) {
-        id = username._id;
-        username.password = null
-      } else if (userEmail) {
-        id = userEmail._id;
-        userEmail.password = null
-      } else {
-        id = "";
-      }
-
+    if(req.user) {
+      const id = req.user
       if (id) {
         const details = await userData.findById(id);
-
+        
         res.status(200).json({ details });
       } else {
         res.status(200).json({ status: false });

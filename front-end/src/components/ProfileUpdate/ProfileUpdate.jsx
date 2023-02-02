@@ -181,8 +181,7 @@ const ProfileUpdate = ({
             } else {
               setTimeout(() => {
                 setLoader(false);
-                setIsOpen(true);
-                setInput("");
+                setIsOpen(true);                
                 toast.success("An otp has sended to your Email. Check it", {
                   position: "top-center",
                   autoClose: 5000,

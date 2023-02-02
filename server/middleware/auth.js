@@ -27,11 +27,11 @@ const validateUserToken = async (req, res, next) => {
     
     try {
       const user = req.headers["x-custom-header"];
-      
       const decode = JWT.verify(user,process.env.JWT_SECRET_KEY);
-      
+      // check blocked or not
+      req.user = decode.UserInfo.user
       const type = decode.UserInfo.type;
-      if (type === "user") {
+      if (req.user && type === "user") {
         next();
       }
     } catch (err) {
